@@ -104,9 +104,11 @@ R1_cfm_data = {
     'ICC': 'LE',
     'UMC': 'XXX-500134',
 	'local_mep_id': '1',
-    'remote_mep_id': '2'
+    'remote_mep_id': '2',
+    'SLM': 'yes'  # if required= yes, not required= blank
 }
 
+##SLM parameter is not present as SLM config not required on other end
 R2_cfm_data = {
     'domain_name': 'COLT-1',
     'domain_level': '1',
@@ -137,6 +139,11 @@ intf_status = "up        up"    # 8 spaces
 
 L2VPN_status = """UP        UP        UP"""     # 8 spaces
 
+## make sure there is one space before Lost
+SLM_status =""" Lost: 0 (0.0%); Corrupt: 0 (0.0%);
+ Lost: 0 (0.0%); Corrupt: 0 (0.0%);
+ Lost: 0 (0.0%); Corrupt: 0 (0.0%);
+ Lost: 0 (0.0%); Corrupt: 0 (0.0%);"""
 
 
 

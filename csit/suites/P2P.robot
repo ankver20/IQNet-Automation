@@ -222,11 +222,32 @@ EPL_PTP_NCS-NCS_MainIntf
     run keyword and continue on failure    should contain    ${show_result}    ${local_mep_info}
     run keyword and continue on failure    should contain    ${show_result}    ${peer_mep_info}
 
+    # verify the SLM/DMM status
+    sleep  180
+    ${template_data}=    Create Dictionary    interface=${NCS_R1_P1}
+    ${show_result}=    SHOW COMMAND    ${NCS_R1_net_connect}    show_SLA_template    ${template_data}
+    log to console    ${show_result}
+    run keyword and continue on failure    should contain    ${show_result}    ${SLM_status}
+
     # Send Traffic from Spirent
     ${spirent_traffic}=    L2_Traffic
     log to console  ${spirent_traffic}
     run keyword and continue on failure    should not contain    ${spirent_traffic}    fail
-    SLEEP  10
+    SLEEP  20
+
+    log to console  TI-LFA TRAFFIC
+    ## TI-LFA FAILURE & REPAIR
+    ${spirent_traffic}=    FAILURE_TILFA
+    log to console  ${spirent_traffic}
+    run keyword and continue on failure    should not contain    ${spirent_traffic}    fail
+    SLEEP  20
+
+    log to console  TI-LFA FAILURE DONE. REPAIR TO SATRT
+
+    ${spirent_traffic}=    REPAIR_TILFA
+    log to console  ${spirent_traffic}
+    run keyword and continue on failure    should not contain    ${spirent_traffic}    fail
+    SLEEP  20
 
     #uncofigure all the paremeters - interface, sub-interface, CFM, evpn & l2vpn
     UNCONFIGURE INTF    ${NCS_R1_net_connect}    ${NCS_R1_P1}    ${Del_NCS_int_template}    ${R1_interface_data}

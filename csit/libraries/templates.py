@@ -173,11 +173,16 @@ ethernet cfm
   no service {{ component.service_name }} xconnect group {{ component.xc_group }} p2p {{ component.p2p_xc_name }} id icc-based {{ component.ICC }} {{ component.UMC }}
 """
 
+## SLM/DMM also configured with CFM when SLM = 'yes'
 CFM_intf_template = """
 interface {{ component.cfm_ckt_intf }}
  ethernet cfm
   mep domain {{ component.domain_name }} service {{ component.service_name }} mep-id {{ component.local_mep_id }}
    cos 2
+   {% if component.SLM == 'yes' %}
+   sla operation profile DMM2 target mep-id {{ component.remote_mep_id }}
+   sla operation profile SLM2 target mep-id {{ component.remote_mep_id }}
+   {% endif %}
 """
 
 
@@ -197,6 +202,12 @@ show_eth_cfm_template = """show ethernet cfm services domain {{ component.domain
 # local_mep_info = "Local MEPs: 1 total: all operational, no errors"
 # peer_mep_info = "Peer MEPs: 1 total: all operational, no errors"
 
+show_SLA_template = """show ethernet sla statistics interface {{ component.interface }}"""
+# SLA_status =""" Lost: 0 (0.0%); Corrupt: 0 (0.0%);
+#  Lost: 0 (0.0%); Corrupt: 0 (0.0%);
+#  Lost: 0 (0.0%); Corrupt: 0 (0.0%);
+#  Lost: 0 (0.0%); Corrupt: 0 (0.0%);
+#  Lost: 0 (0.0%); Corrupt: 0 (0.0%);"""
 
 #########################
 ##  ACCEDIAN COMMANDS  ##
