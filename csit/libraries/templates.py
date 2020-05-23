@@ -118,12 +118,14 @@ no policy-map {{ component.ser_policy_map }}
 
 Ser_Pol_map_intf_template = """
 interface {{ component.policy_intf }} l2transport
+no service-policy input
 service-policy input {{ component.ser_policy_map }}
 """
 
 Ser_Pol_map_main_intf_template = """
 interface {{ component.policy_intf }}
  l2transport
+ no service-policy input
  service-policy input {{ component.ser_policy_map }}
 """
 
@@ -208,6 +210,8 @@ show_SLA_template = """show ethernet sla statistics interface {{ component.inter
 #  Lost: 0 (0.0%); Corrupt: 0 (0.0%);
 #  Lost: 0 (0.0%); Corrupt: 0 (0.0%);
 #  Lost: 0 (0.0%); Corrupt: 0 (0.0%);"""
+
+show_pol_map_int = """show policy-map interface {{ component.interface }}"""
 
 #########################
 ##  ACCEDIAN COMMANDS  ##

@@ -61,6 +61,13 @@ Ser_Pol_map_1G_data = {
     'qos_group': '2'
 }
 
+Ser_Pol_map_500M_data = {
+    'ser_policy_map': 'BW-500M-Class-test',
+    'police_rate': '500000 kbps',
+    'burst': '100 kbytes',
+    'traffic_class': '2',
+    'qos_group': '2'
+}
 
 R1_evpn_data = {
     'evpn_id': '2100',
