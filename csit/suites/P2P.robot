@@ -481,7 +481,7 @@ EPL_PTP_NCS-NCS_MainIntf_LLF
     #LLF verification needs to be added
 
     # Send Traffic from Spirent
-    ${spirent_traffic}=    L2_Traffic
+    ${spirent_traffic}=    L2_100M_F1500_Traffic
     log to console  ${spirent_traffic}
     run keyword and continue on failure    should not contain    ${spirent_traffic}    fail
     SLEEP  10
