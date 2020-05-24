@@ -879,7 +879,8 @@ def FAILURE_TILFA():
             device                                           = device,
             port_list                                        = port_list,
             break_locks                                      = 1,
-            offline                                          = 0 )
+            offline                                          = 0,
+            reset                                            = 1)
 
     status = intStatus['status']
 
@@ -1297,7 +1298,8 @@ def REPAIR_TILFA():
             device                                           = device,
             port_list                                        = port_list,
             break_locks                                      = 1,
-            offline                                          = 0 )
+            offline                                          = 0,
+            reset                                            = 1)
 
     status = intStatus['status']
 
@@ -1662,6 +1664,7 @@ def REPAIR_TILFA():
 
 
     print("**************Finish***************")
+
 
 
 def SpirentResult(traffic_results_ret, port_list):
