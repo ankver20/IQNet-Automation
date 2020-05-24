@@ -216,6 +216,7 @@ EPL_PTP_NCS-NCS_SubIntf
     # Send Traffic from Spirent 1 Gbps // Traffic will drop so no check added here
     ${spirent_traffic}=    L2_1G_F1500Traffic
     log to console  ${spirent_traffic}
+    run keyword and continue on failure    should contain  ${spirent_traffic}    fail
     SLEEP  30
 
     # show command for policy map counter
@@ -373,6 +374,7 @@ EPL_PTP_NCS-NCS_MainIntf
     # Send Traffic from Spirent 1 Gbps // Traffic will drop so no check added here
     ${spirent_traffic}=    L2_1G_F1500Traffic
     log to console  ${spirent_traffic}
+    run keyword and continue on failure    should contain  ${spirent_traffic}    fail
     SLEEP  30
 
     # show command for policy map counter on NCS_R1
@@ -475,6 +477,8 @@ EPL_PTP_NCS-NCS_MainIntf_LLF
     run keyword and continue on failure    should contain    ${show_result}    ${local_mep_info}
     run keyword and continue on failure    should contain    ${show_result}    ${peer_mep_info}
 
+    log to console  Configuring LLF
+
     #configure LLF on NCS_R1 & NCS_R2
     CONFIGURE LLF    ${NCS_R1_net_connect}    ${NCS_R1_P1}    ${LLF_template}    ${LLF_data}
     CONFIGURE LLF    ${NCS_R2_net_connect}    ${NCS_R2_P1}    ${LLF_template}    ${LLF_data}
@@ -484,9 +488,19 @@ EPL_PTP_NCS-NCS_MainIntf_LLF
     ${spirent_traffic}=    L2_100M_F1500_Traffic
     log to console  ${spirent_traffic}
     run keyword and continue on failure    should not contain    ${spirent_traffic}    fail
-    SLEEP  10
+    SLEEP  30
 
-    SLEEP  120
+    # show command for policy map counter on NCS_R1
+    ${template_data}=    Create Dictionary    interface=${NCS_R1_P1}
+    ${show_result}=    SHOW COMMAND    ${NCS_R1_net_connect}    show_pol_map_int    ${template_data}
+    log to console    ${show_result}
+
+    # show command for policy map counter on NCS_R2
+    ${template_data}=    Create Dictionary    interface=${NCS_R2_P1}
+    ${show_result}=    SHOW COMMAND    ${NCS_R2_net_connect}    show_pol_map_int    ${template_data}
+    log to console    ${show_result}
+
+    SLEEP  10
 
     #uncofigure all the paremeters - interface, sub-interface, CFM, evpn & l2vpn
     UNCONFIGURE INTF    ${NCS_R1_net_connect}    ${NCS_R1_P1}    ${Del_NCS_int_template}    ${R1_interface_data}
