@@ -134,14 +134,14 @@ EPL_PTP_NCS-NCS_SubIntf
     run keyword and continue on failure    should contain    ${show_result}    ${local_mep_info}
     run keyword and continue on failure    should contain    ${show_result}    ${peer_mep_info}
 
-#    log to console  Verify SLM/DMM
-#
-#    # verify the SLM/DMM status on NCS_R1
-#    sleep  400
-#    ${template_data}=    Create Dictionary    interface=${NCS_R1_P1}.${sub_interface_4095}
-#    ${show_result}=    SHOW COMMAND    ${NCS_R1_net_connect}    show_SLA_template    ${template_data}
-#    log to console    ${show_result}
-#    run keyword and continue on failure    should contain    ${show_result}    ${SLM_status}
+    log to console  Verify SLM/DMM
+
+    # verify the SLM/DMM status on NCS_R1
+    sleep  400
+    ${template_data}=    Create Dictionary    interface=${NCS_R1_P1}.${sub_interface_4095}
+    ${show_result}=    SHOW COMMAND    ${NCS_R1_net_connect}    show_SLA_template    ${template_data}
+    log to console    ${show_result}
+    run keyword and continue on failure    should contain    ${show_result}    ${SLM_status}
 
     log to console  Send 100 Mbps Traffic
 
