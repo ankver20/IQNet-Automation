@@ -351,23 +351,23 @@ EPL_PTP_NCS-NCS_MainIntf
     CONFIGURE SERVICE-POLICY-MAP-INTF    ${NCS_R1_net_connect}    ${NCS_R1_P1}    ${Ser_Pol_map_main_intf_template}    ${Ser_Pol_map_500M_data}
     CONFIGURE SERVICE-POLICY-MAP-INTF    ${NCS_R2_net_connect}    ${NCS_R2_P1}    ${Ser_Pol_map_main_intf_template}    ${Ser_Pol_map_500M_data}
 
-    log to console  send 100 Mbps (No Drop expected)
+#    log to console  send 100 Mbps (No Drop expected)
+#
+#    # Send Traffic from Spirent 100 Mbps
+#    ${spirent_traffic}=    L2_100M_F1500_Traffic
+#    log to console  ${spirent_traffic}
+#    run keyword and continue on failure    should not contain    ${spirent_traffic}    fail
+#    SLEEP  30
 
-    # Send Traffic from Spirent 100 Mbps
-    ${spirent_traffic}=    L2_100M_F1500_Traffic
-    log to console  ${spirent_traffic}
-    run keyword and continue on failure    should not contain    ${spirent_traffic}    fail
-    SLEEP  30
-
-    # show command for policy map counter on NCS_R1
-    ${template_data}=    Create Dictionary    interface=${NCS_R1_P1}
-    ${show_result}=    SHOW COMMAND    ${NCS_R1_net_connect}    show_pol_map_int    ${template_data}
-    log to console    ${show_result}
-
-    # show command for policy map counter on NCS_R2
-    ${template_data}=    Create Dictionary    interface=${NCS_R2_P1}
-    ${show_result}=    SHOW COMMAND    ${NCS_R2_net_connect}    show_pol_map_int    ${template_data}
-    log to console    ${show_result}
+#    # show command for policy map counter on NCS_R1
+#    ${template_data}=    Create Dictionary    interface=${NCS_R1_P1}
+#    ${show_result}=    SHOW COMMAND    ${NCS_R1_net_connect}    show_pol_map_int    ${template_data}
+#    log to console    ${show_result}
+#
+#    # show command for policy map counter on NCS_R2
+#    ${template_data}=    Create Dictionary    interface=${NCS_R2_P1}
+#    ${show_result}=    SHOW COMMAND    ${NCS_R2_net_connect}    show_pol_map_int    ${template_data}
+#    log to console    ${show_result}
 
     log to console  send 1 Gbps (Drop expected)
 
