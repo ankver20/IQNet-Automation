@@ -389,22 +389,21 @@ EPL_PTP_NCS-NCS_MainIntf
 
     log to console  TI-LFA TRAFFIC
 
-
-
     ## TI-LFA FAILURE & REPAIR
     ${spirent_traffic}=    FAILURE_TILFA
     log to console  ${spirent_traffic}
     run keyword and continue on failure    should not contain    ${spirent_traffic}    fail
-    SLEEP  60
+    SLEEP  30
 
     log to console  TI-LFA FAILURE DONE. REPAIR TO SATRT
 
     ${spirent_traffic}=    REPAIR_TILFA
     log to console  ${spirent_traffic}
     run keyword and continue on failure    should not contain    ${spirent_traffic}    fail
-    SLEEP  60
+    SLEEP  30
 
-    SLEEP   20
+    log to console  Unconfigure all parameters
+
     #uncofigure all the paremeters - interface, sub-interface, CFM, evpn & l2vpn
     UNCONFIGURE INTF    ${NCS_R1_net_connect}    ${NCS_R1_P1}    ${Del_NCS_int_template}    ${R1_interface_data}
     UNCONFIGURE INTF    ${NCS_R2_net_connect}    ${NCS_R2_P1}    ${Del_NCS_int_template}    ${R2_interface_data}
@@ -502,7 +501,9 @@ EPL_PTP_NCS-NCS_MainIntf_LLF
     ${show_result}=    SHOW COMMAND    ${NCS_R2_net_connect}    show_pol_map_int    ${template_data}
     log to console    ${show_result}
 
-    SLEEP  10
+    SLEEP  30
+
+    log to console  Unconfigure all parameters
 
     #uncofigure all the paremeters - interface, sub-interface, CFM, evpn & l2vpn
     UNCONFIGURE INTF    ${NCS_R1_net_connect}    ${NCS_R1_P1}    ${Del_NCS_int_template}    ${R1_interface_data}
