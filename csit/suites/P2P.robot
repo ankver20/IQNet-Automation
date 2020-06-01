@@ -390,25 +390,19 @@ EPL_PTP_NCS-NCS_MainIntf
     log to console  TI-LFA TRAFFIC
 
 
-    log to console  REPAIR TO SATRT
-
-    ${spirent_traffic}=    REPAIR_TILFA
-    log to console  ${spirent_traffic}
-    run keyword and continue on failure    should not contain    ${spirent_traffic}    fail
-    SLEEP  30
 
     ## TI-LFA FAILURE & REPAIR
     ${spirent_traffic}=    FAILURE_TILFA
     log to console  ${spirent_traffic}
     run keyword and continue on failure    should not contain    ${spirent_traffic}    fail
-    SLEEP  30
+    SLEEP  60
 
-#    log to console  TI-LFA FAILURE DONE. REPAIR TO SATRT
-#
-#    ${spirent_traffic}=    REPAIR_TILFA
-#    log to console  ${spirent_traffic}
-#    run keyword and continue on failure    should not contain    ${spirent_traffic}    fail
-#    SLEEP  30
+    log to console  TI-LFA FAILURE DONE. REPAIR TO SATRT
+
+    ${spirent_traffic}=    REPAIR_TILFA
+    log to console  ${spirent_traffic}
+    run keyword and continue on failure    should not contain    ${spirent_traffic}    fail
+    SLEEP  60
 
     SLEEP   20
     #uncofigure all the paremeters - interface, sub-interface, CFM, evpn & l2vpn

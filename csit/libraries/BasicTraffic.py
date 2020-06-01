@@ -1079,7 +1079,7 @@ def FAILURE_TILFA():
 
     OverallStatus = str(rx_stats) + str(tx_stats) + str(pkt_drop) + status
     print(OverallStatus)
-    return OverallStatus
+
 
 
     # port1_RX = traffic_results_ret['port1']['stream']['streamblock1']['rx']['total_pkts']
@@ -1121,6 +1121,8 @@ def FAILURE_TILFA():
 
 
     print("**************Finish***************")
+
+    return OverallStatus
 
 
 ## TI-LFA REPAIR
@@ -1496,7 +1498,7 @@ def REPAIR_TILFA():
 
     OverallStatus = str(rx_stats) + str(tx_stats) + str(pkt_drop) + status
     print(OverallStatus)
-    return OverallStatus
+
 
     # port1_RX = traffic_results_ret['port1']['stream']['streamblock1']['rx']['total_pkts']
     # port1_TX = traffic_results_ret['port1']['stream']['streamblock1']['tx']['total_pkts']
@@ -1538,6 +1540,7 @@ def REPAIR_TILFA():
 
 
     print("**************Finish***************")
+    return OverallStatus
 
 
 # ELINE RFC test
