@@ -319,7 +319,12 @@ def L2_100M_F1500_Traffic():
     #start to get the device results
     ##############################################################
 
-    time.sleep(30)
+    time.sleep(40)
+
+    traffic_ctrl_ret = sth.traffic_control(
+        port_handle=[port_handle[0], port_handle[1]],
+        action='stop')
+    print("***** traffic stopped")
 
     ##############################################################
     #start to get the traffic results
@@ -658,7 +663,12 @@ def L2_1G_F1500_Traffic():
     #start to get the device results
     ##############################################################
 
-    time.sleep(30)
+    time.sleep(40)
+
+    traffic_ctrl_ret = sth.traffic_control(
+        port_handle=[port_handle[0], port_handle[1]],
+        action='stop')
+    print("***** traffic stopped")
 
     ##############################################################
     #start to get the traffic results
@@ -1947,10 +1957,12 @@ def SpirentResult(traffic_results_ret, port_list):
     traffic_result = str(traffic_results_ret)
 
     #regex to get rx, tx and streams from traffic_results_ret
-    RX = '(streamblock\d+)\S+\s+\S+(rx)\S+\s+\S+total_pkt_bytes\S+\s+\S(\d+)'
-    TX = '(streamblock\d+).*?(tx)\S+\s+\S+total_pkt_bytes\S+\s+\S(\d+)'
+    # RX = '(streamblock\d+)\S+\s+\S+(rx)\S+\s+\S+total_pkt_bytes\S+\s+\S(\d+)'
+    # TX = '(streamblock\d+).*?(tx)\S+\s+\S+total_pkt_bytes\S+\s+\S(\d+)'
     StreamBlock = 'streamblock\d+'
 
+    RX = '(streamblock\d+).*?(rx).*?(total_pkts).*?(\d+)'
+    TX = '(streamblock\d+).*?(tx).*?(total_pkts).*?(\d+)'
 
     print('Spirent Ports= ' + str(port_list) + '\nTotal Ports= ' + str(len(port_list)))
     PortStatus = 'Spirent Ports= ' + str(port_list) + '\nTotal Ports= ' + str(len(port_list))
