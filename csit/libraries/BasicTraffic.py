@@ -1982,7 +1982,7 @@ def SpirentResult(traffic_results_ret, port_list):
     StreamResult = []
 
     for i in range(0,len(StreamBlock)):
-        if rx_stats[i][2] == tx_stats[i][2]:
+        if rx_stats[i][3] == tx_stats[i][3]:
             print(str(rx_stats[i][0] + ' = pass'))
             StreamResult.append('pass')
 
