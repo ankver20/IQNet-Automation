@@ -520,6 +520,1007 @@ EPL_PTP_NCS-NCS_MainIntf_LLF
     log to console    END OF TEST CASE
 
 
+### 3 june addition of L2 transparancy
+
+EPL_PTP_NCS-NCS_MainIntf_VLAN_Transperency
+
+    [Tags]    EPL_PTP_NCS-NCS_MainIntf_VLAN_Transperency
+
+    #configure Policy map egr on R1 & R2
+
+    CONFIGURE POLICY-MAP-EGR    ${NCS_R1_net_connect}    ${Pol_map_egr_template}    ${Pol_map_egr_data}
+
+    CONFIGURE POLICY-MAP-EGR    ${NCS_R2_net_connect}    ${Pol_map_egr_template}    ${Pol_map_egr_data}
+
+    #configure service Policy map ingress on R1 & R2
+
+    CONFIGURE SERVICE-POLICY-MAP    ${NCS_R1_net_connect}    ${Ser_Pol_map_template}    ${Ser_Pol_map_1G_data}
+
+    CONFIGURE SERVICE-POLICY-MAP    ${NCS_R2_net_connect}    ${Ser_Pol_map_template}    ${Ser_Pol_map_1G_data}
+
+    #configure main interface on R1 & R2
+
+    CONFIGURE INTERFACE    ${NCS_R1_net_connect}    ${NCS_R1_P1}    ${NCS_main_int_template}    ${R1_interface_data}
+
+    CONFIGURE INTERFACE    ${NCS_R2_net_connect}    ${NCS_R2_P1}    ${NCS_main_int_template}    ${R2_interface_data}
+
+    #configure service Policy map on main-intf in ingress
+
+    CONFIGURE SERVICE-POLICY-MAP-INTF    ${NCS_R1_net_connect}    ${NCS_R1_P1}    ${Ser_Pol_map_main_intf_template}    ${Ser_Pol_map_1G_data}
+
+    CONFIGURE SERVICE-POLICY-MAP-INTF    ${NCS_R2_net_connect}    ${NCS_R2_P1}    ${Ser_Pol_map_main_intf_template}    ${Ser_Pol_map_1G_data}
+
+    #verify status of main intf status R1
+
+    ${template_data}=    Create Dictionary    interface=${NCS_R1_P1}
+
+    ${show_result}=    SHOW COMMAND    ${NCS_R1_net_connect}    show_interface_template    ${template_data}
+
+    log to console    ${show_result}
+
+    run keyword and continue on failure    should contain    ${show_result}    ${intf_status}
+
+    #verify status of main intf status R2
+
+    ${template_data}=    Create Dictionary    interface=${NCS_R2_P1}
+
+    ${show_result}=    SHOW COMMAND    ${NCS_R2_net_connect}    show_interface_template    ${template_data}
+
+    log to console    ${show_result}
+
+    run keyword and continue on failure    should contain    ${show_result}    ${intf_status}
+
+    #configure EPL & L2VPN on R1 & R2
+
+    CONFIGURE EVPN    ${NCS_R1_net_connect}    ${EVPN_template}    ${R1_evpn_data}
+
+    CONFIGURE L2VPN    ${NCS_R1_net_connect}    ${NCS_R1_P1}    ${L2VPN_template}    ${R1_l2vpn_data}
+
+    CONFIGURE EVPN    ${NCS_R2_net_connect}    ${EVPN_template}    ${R2_evpn_data}
+
+    CONFIGURE L2VPN    ${NCS_R2_net_connect}    ${NCS_R2_P1}    ${L2VPN_template}    ${R2_l2vpn_data}
+
+    #verify L2VPN status R1
+
+    ${show_result}=    SHOW COMMAND    ${NCS_R1_net_connect}    show_L2VPN_template    ${R1_l2vpn_data}
+
+    log to console    ${show_result}
+
+    run keyword and continue on failure    should contain    ${show_result}    ${L2VPN_status}
+
+    #verify L2VPN status R2
+
+    ${show_result}=    SHOW COMMAND    ${NCS_R2_net_connect}    show_L2VPN_template    ${R2_l2vpn_data}
+
+    log to console    ${show_result}
+
+    run keyword and continue on failure    should contain    ${show_result}    ${L2VPN_status}
+
+    #configure CFM on R1 & R2
+
+    CONFIGURE CFM    ${NCS_R1_net_connect}    ${CFM_template}    ${R1_cfm_data}
+
+    CONFIGURE CFM    ${NCS_R2_net_connect}    ${CFM_template}    ${R2_cfm_data}
+
+    CONFIGURE CFM-INTF    ${NCS_R1_net_connect}    ${NCS_R1_P1}    ${CFM_intf_template}    ${R1_cfm_data}
+
+    CONFIGURE CFM-INTF    ${NCS_R2_net_connect}    ${NCS_R2_P1}    ${CFM_intf_template}    ${R2_cfm_data}
+
+    #verify the CFM status on R1 & R2
+
+    #wait 80 sec for CFM to exchnage msgs & come up
+
+    Sleep    80
+
+    ${show_result}=    SHOW COMMAND    ${NCS_R1_net_connect}    show_eth_cfm_template    ${R1_cfm_data}
+
+    log to console    ${show_result}
+
+    run keyword and continue on failure    should contain    ${show_result}    ${local_mep_info}
+
+    run keyword and continue on failure    should contain    ${show_result}    ${peer_mep_info}
+
+    ${show_result}=    SHOW COMMAND    ${NCS_R2_net_connect}    show_eth_cfm_template    ${R2_cfm_data}
+
+    log to console    ${show_result}
+
+    run keyword and continue on failure    should contain    ${show_result}    ${local_mep_info}
+
+    run keyword and continue on failure    should contain    ${show_result}    ${peer_mep_info}
+
+    # Verify L2VPN status again
+
+    Sleep    10
+
+    #verify L2VPN status R1
+
+    ${show_result}=    SHOW COMMAND    ${NCS_R1_net_connect}    show_L2VPN_template    ${R1_l2vpn_data}
+
+    log to console    ${show_result}
+
+    run keyword and continue on failure    should contain    ${show_result}    ${L2VPN_status}
+
+    #verify L2VPN status R2
+
+    ${show_result}=    SHOW COMMAND    ${NCS_R2_net_connect}    show_L2VPN_template    ${R2_l2vpn_data}
+
+    log to console    ${show_result}
+
+    run keyword and continue on failure    should contain    ${show_result}    ${L2VPN_status}
+
+    # Verify CFM status again
+
+    Sleep    10
+
+    ${show_result}=    SHOW COMMAND    ${NCS_R1_net_connect}    show_eth_cfm_template    ${R1_cfm_data}
+
+    log to console    ${show_result}
+
+    run keyword and continue on failure    should contain    ${show_result}    ${local_mep_info}
+
+    run keyword and continue on failure    should contain    ${show_result}    ${peer_mep_info}
+
+    ${show_result}=    SHOW COMMAND    ${NCS_R2_net_connect}    show_eth_cfm_template    ${R2_cfm_data}
+
+    log to console    ${show_result}
+
+    run keyword and continue on failure    should contain    ${show_result}    ${local_mep_info}
+
+    run keyword and continue on failure    should contain    ${show_result}    ${peer_mep_info}
+
+    # Send Traffic from Spirent
+
+    ${spirent_traffic}=    Spirent VLAN Transperancy Traffic Testing For P2P Service
+
+    log to console    ${spirent_traffic}
+
+    run keyword and continue on failure    should not contain    ${spirent_traffic}    fail
+
+    SLEEP    10
+
+    #uncofigure all the paremeters - interface, sub-interface, CFM, evpn & l2vpn
+
+    UNCONFIGURE INTF    ${NCS_R1_net_connect}    ${NCS_R1_P1}    ${Del_NCS_int_template}    ${R1_interface_data}
+
+    UNCONFIGURE INTF    ${NCS_R2_net_connect}    ${NCS_R2_P1}    ${Del_NCS_int_template}    ${R2_interface_data}
+
+    UNCONFIGURE SERVICE-POLICY-MAP    ${NCS_R1_net_connect}    ${Del_Ser_Pol_map_template}    ${Ser_Pol_map_1G_data}
+
+    UNCONFIGURE SERVICE-POLICY-MAP    ${NCS_R2_net_connect}    ${Del_Ser_Pol_map_template}    ${Ser_Pol_map_1G_data}
+
+    UNCONFIGURE CFM    ${NCS_R1_net_connect}    ${Del_CFM_template}    ${R1_cfm_data}
+
+    UNCONFIGURE CFM    ${NCS_R2_net_connect}    ${Del_CFM_template}    ${R2_cfm_data}
+
+    UNCONFIGURE EVPN    ${NCS_R1_net_connect}    ${Del_EVPN_template}    ${R1_evpn_data}
+
+    UNCONFIGURE EVPN    ${NCS_R2_net_connect}    ${Del_EVPN_template}    ${R2_evpn_data}
+
+    UNCONFIGURE L2VPN    ${NCS_R1_net_connect}    ${Del_L2VPN_template}    ${R1_l2vpn_data}
+
+    UNCONFIGURE L2VPN    ${NCS_R2_net_connect}    ${Del_L2VPN_template}    ${R2_l2vpn_data}
+
+    log to console    END OF TEST CASE
+
+
+EPL_PTP_NCS-NCS_MainIntf_MAC_Transperency
+
+    [Tags]    EPL_PTP_NCS-NCS_MainIntf_VLAN_Transperency
+
+    #configure Policy map egr on R1 & R2
+
+    CONFIGURE POLICY-MAP-EGR    ${NCS_R1_net_connect}    ${Pol_map_egr_template}    ${Pol_map_egr_data}
+
+    CONFIGURE POLICY-MAP-EGR    ${NCS_R2_net_connect}    ${Pol_map_egr_template}    ${Pol_map_egr_data}
+
+    #configure service Policy map ingress on R1 & R2
+
+    CONFIGURE SERVICE-POLICY-MAP    ${NCS_R1_net_connect}    ${Ser_Pol_map_template}    ${Ser_Pol_map_1G_data}
+
+    CONFIGURE SERVICE-POLICY-MAP    ${NCS_R2_net_connect}    ${Ser_Pol_map_template}    ${Ser_Pol_map_1G_data}
+
+    #configure main interface on R1 & R2
+
+    CONFIGURE INTERFACE    ${NCS_R1_net_connect}    ${NCS_R1_P1}    ${NCS_main_int_template}    ${R1_interface_data}
+
+    CONFIGURE INTERFACE    ${NCS_R2_net_connect}    ${NCS_R2_P1}    ${NCS_main_int_template}    ${R2_interface_data}
+
+    #configure service Policy map on main-intf in ingress
+
+    CONFIGURE SERVICE-POLICY-MAP-INTF    ${NCS_R1_net_connect}    ${NCS_R1_P1}    ${Ser_Pol_map_main_intf_template}    ${Ser_Pol_map_1G_data}
+
+    CONFIGURE SERVICE-POLICY-MAP-INTF    ${NCS_R2_net_connect}    ${NCS_R2_P1}    ${Ser_Pol_map_main_intf_template}    ${Ser_Pol_map_1G_data}
+
+    #verify status of main intf status R1
+
+    ${template_data}=    Create Dictionary    interface=${NCS_R1_P1}
+
+    ${show_result}=    SHOW COMMAND    ${NCS_R1_net_connect}    show_interface_template    ${template_data}
+
+    log to console    ${show_result}
+
+    run keyword and continue on failure    should contain    ${show_result}    ${intf_status}
+
+    #verify status of main intf status R2
+
+    ${template_data}=    Create Dictionary    interface=${NCS_R2_P1}
+
+    ${show_result}=    SHOW COMMAND    ${NCS_R2_net_connect}    show_interface_template    ${template_data}
+
+    log to console    ${show_result}
+
+    run keyword and continue on failure    should contain    ${show_result}    ${intf_status}
+
+    #configure EPL & L2VPN on R1 & R2
+
+    CONFIGURE EVPN    ${NCS_R1_net_connect}    ${EVPN_template}    ${R1_evpn_data}
+
+    CONFIGURE L2VPN    ${NCS_R1_net_connect}    ${NCS_R1_P1}    ${L2VPN_template}    ${R1_l2vpn_data}
+
+    CONFIGURE EVPN    ${NCS_R2_net_connect}    ${EVPN_template}    ${R2_evpn_data}
+
+    CONFIGURE L2VPN    ${NCS_R2_net_connect}    ${NCS_R2_P1}    ${L2VPN_template}    ${R2_l2vpn_data}
+
+    #verify L2VPN status R1
+
+    ${show_result}=    SHOW COMMAND    ${NCS_R1_net_connect}    show_L2VPN_template    ${R1_l2vpn_data}
+
+    log to console    ${show_result}
+
+    run keyword and continue on failure    should contain    ${show_result}    ${L2VPN_status}
+
+    #verify L2VPN status R2
+
+    ${show_result}=    SHOW COMMAND    ${NCS_R2_net_connect}    show_L2VPN_template    ${R2_l2vpn_data}
+
+    log to console    ${show_result}
+
+    run keyword and continue on failure    should contain    ${show_result}    ${L2VPN_status}
+
+    #configure CFM on R1 & R2
+
+    CONFIGURE CFM    ${NCS_R1_net_connect}    ${CFM_template}    ${R1_cfm_data}
+
+    CONFIGURE CFM    ${NCS_R2_net_connect}    ${CFM_template}    ${R2_cfm_data}
+
+    CONFIGURE CFM-INTF    ${NCS_R1_net_connect}    ${NCS_R1_P1}    ${CFM_intf_template}    ${R1_cfm_data}
+
+    CONFIGURE CFM-INTF    ${NCS_R2_net_connect}    ${NCS_R2_P1}    ${CFM_intf_template}    ${R2_cfm_data}
+
+    #verify the CFM status on R1 & R2
+
+    #wait 80 sec for CFM to exchnage msgs & come up
+
+    Sleep    80
+
+    ${show_result}=    SHOW COMMAND    ${NCS_R1_net_connect}    show_eth_cfm_template    ${R1_cfm_data}
+
+    log to console    ${show_result}
+
+    run keyword and continue on failure    should contain    ${show_result}    ${local_mep_info}
+
+    run keyword and continue on failure    should contain    ${show_result}    ${peer_mep_info}
+
+    ${show_result}=    SHOW COMMAND    ${NCS_R2_net_connect}    show_eth_cfm_template    ${R2_cfm_data}
+
+    log to console    ${show_result}
+
+    run keyword and continue on failure    should contain    ${show_result}    ${local_mep_info}
+
+    run keyword and continue on failure    should contain    ${show_result}    ${peer_mep_info}
+
+    # Verify L2VPN status again
+
+    Sleep    10
+
+    #verify L2VPN status R1
+
+    ${show_result}=    SHOW COMMAND    ${NCS_R1_net_connect}    show_L2VPN_template    ${R1_l2vpn_data}
+
+    log to console    ${show_result}
+
+    run keyword and continue on failure    should contain    ${show_result}    ${L2VPN_status}
+
+    #verify L2VPN status R2
+
+    ${show_result}=    SHOW COMMAND    ${NCS_R2_net_connect}    show_L2VPN_template    ${R2_l2vpn_data}
+
+    log to console    ${show_result}
+
+    run keyword and continue on failure    should contain    ${show_result}    ${L2VPN_status}
+
+    # Verify CFM status again
+
+    Sleep    10
+
+    ${show_result}=    SHOW COMMAND    ${NCS_R1_net_connect}    show_eth_cfm_template    ${R1_cfm_data}
+
+    log to console    ${show_result}
+
+    run keyword and continue on failure    should contain    ${show_result}    ${local_mep_info}
+
+    run keyword and continue on failure    should contain    ${show_result}    ${peer_mep_info}
+
+    ${show_result}=    SHOW COMMAND    ${NCS_R2_net_connect}    show_eth_cfm_template    ${R2_cfm_data}
+
+    log to console    ${show_result}
+
+    run keyword and continue on failure    should contain    ${show_result}    ${local_mep_info}
+
+    run keyword and continue on failure    should contain    ${show_result}    ${peer_mep_info}
+
+    # Send Traffic from Spirent
+
+    ${spirent_traffic}=    Spirent MAC Transperancy Traffic Testing For P2P Service
+
+    log to console    Out Of Spirent
+
+    log to console    ${spirent_traffic}
+
+    run keyword and continue on failure    should not contain    ${spirent_traffic}    fail
+
+    SLEEP    60
+
+    #uncofigure all the paremeters - interface, sub-interface, CFM, evpn & l2vpn
+
+    UNCONFIGURE INTF    ${NCS_R1_net_connect}    ${NCS_R1_P1}    ${Del_NCS_int_template}    ${R1_interface_data}
+
+    UNCONFIGURE INTF    ${NCS_R2_net_connect}    ${NCS_R2_P1}    ${Del_NCS_int_template}    ${R2_interface_data}
+
+    UNCONFIGURE SERVICE-POLICY-MAP    ${NCS_R1_net_connect}    ${Del_Ser_Pol_map_template}    ${Ser_Pol_map_1G_data}
+
+    UNCONFIGURE SERVICE-POLICY-MAP    ${NCS_R2_net_connect}    ${Del_Ser_Pol_map_template}    ${Ser_Pol_map_1G_data}
+
+    UNCONFIGURE CFM    ${NCS_R1_net_connect}    ${Del_CFM_template}    ${R1_cfm_data}
+
+    UNCONFIGURE CFM    ${NCS_R2_net_connect}    ${Del_CFM_template}    ${R2_cfm_data}
+
+    UNCONFIGURE EVPN    ${NCS_R1_net_connect}    ${Del_EVPN_template}    ${R1_evpn_data}
+
+    UNCONFIGURE EVPN    ${NCS_R2_net_connect}    ${Del_EVPN_template}    ${R2_evpn_data}
+
+    UNCONFIGURE L2VPN    ${NCS_R1_net_connect}    ${Del_L2VPN_template}    ${R1_l2vpn_data}
+
+    UNCONFIGURE L2VPN    ${NCS_R2_net_connect}    ${Del_L2VPN_template}    ${R2_l2vpn_data}
+
+    log to console    END OF TEST CASE
+
+
+EPL_PTP_NCS-NCS_DefaultEncap_VLAN_Transperency
+
+    [Tags]    EPL_PTP_NCS-NCS_DefaultEncap_VLAN_Transperency
+
+    #configure Policy map egr on R1 & R2
+
+    CONFIGURE POLICY-MAP-EGR    ${NCS_R1_net_connect}    ${Pol_map_egr_template}    ${Pol_map_egr_data}
+
+    CONFIGURE POLICY-MAP-EGR    ${NCS_R2_net_connect}    ${Pol_map_egr_template}    ${Pol_map_egr_data}
+
+    #configure service Policy map ingress on R1 & R2
+
+    CONFIGURE SERVICE-POLICY-MAP    ${NCS_R1_net_connect}    ${Ser_Pol_map_template}    ${Ser_Pol_map_1G_data}
+
+    CONFIGURE SERVICE-POLICY-MAP    ${NCS_R2_net_connect}    ${Ser_Pol_map_template}    ${Ser_Pol_map_1G_data}
+
+    #configure interface on R1 & R2
+
+    CONFIGURE INTERFACE    ${NCS_R1_net_connect}    ${NCS_R1_P1}    ${NCS_int_template}    ${R1_interface_data}
+
+    CONFIGURE INTERFACE    ${NCS_R2_net_connect}    ${NCS_R2_P1}    ${NCS_int_template}    ${R2_interface_data}
+
+    #configure sub-interface on R1 & R2
+
+    CONFIGURE SUB-INTERFACE    ${NCS_R1_net_connect}    ${NCS_R1_P1}.${sub_interface_4095}    ${NCS_sub_int_template}    ${R1_sub_interface_data}
+
+    CONFIGURE SUB-INTERFACE    ${NCS_R2_net_connect}    ${NCS_R2_P1}.${sub_interface_4095}    ${NCS_sub_int_template}    ${R2_sub_interface_data}
+
+    #configure service Policy map on sub-intf in ingress
+
+    CONFIGURE SERVICE-POLICY-MAP-INTF    ${NCS_R1_net_connect}    ${NCS_R1_P1}.${sub_interface_4095}    ${Ser_Pol_map_intf_template}    ${Ser_Pol_map_1G_data}
+
+    CONFIGURE SERVICE-POLICY-MAP-INTF    ${NCS_R2_net_connect}    ${NCS_R2_P1}.${sub_interface_4095}    ${Ser_Pol_map_intf_template}    ${Ser_Pol_map_1G_data}
+
+    #verify status of main intf status R1
+
+    ${template_data}=    Create Dictionary    interface=${NCS_R1_P1}
+
+    ${show_result}=    SHOW COMMAND    ${NCS_R1_net_connect}    show_interface_template    ${template_data}
+
+    log to console    ${show_result}
+
+    run keyword and continue on failure    should contain    ${show_result}    ${intf_status}
+
+    #verify status of sub intf status R1
+
+    ${template_data}=    Create Dictionary    interface=${NCS_R1_P1}.${sub_interface_4095}
+
+    ${show_result}=    SHOW COMMAND    ${NCS_R1_net_connect}    show_interface_template    ${template_data}
+
+    log to console    ${show_result}
+
+    run keyword and continue on failure    should contain    ${show_result}    ${intf_status}
+
+    #verify status of main intf status R2
+
+    ${template_data}=    Create Dictionary    interface=${NCS_R2_P1}
+
+    ${show_result}=    SHOW COMMAND    ${NCS_R2_net_connect}    show_interface_template    ${template_data}
+
+    log to console    ${show_result}
+
+    run keyword and continue on failure    should contain    ${show_result}    ${intf_status}
+
+    #verify status of sub intf status R2
+
+    ${template_data}=    Create Dictionary    interface=${NCS_R2_P1}.${sub_interface_4095}
+
+    ${show_result}=    SHOW COMMAND    ${NCS_R2_net_connect}    show_interface_template    ${template_data}
+
+    log to console    ${show_result}
+
+    run keyword and continue on failure    should contain    ${show_result}    ${intf_status}
+
+    #configure EPL & L2VPN on R1 & R2
+
+    CONFIGURE EVPN    ${NCS_R1_net_connect}    ${EVPN_template}    ${R1_evpn_data}
+
+    CONFIGURE L2VPN    ${NCS_R1_net_connect}    ${NCS_R1_P1}.${sub_interface_4095}    ${L2VPN_template}    ${R1_l2vpn_data}
+
+    CONFIGURE EVPN    ${NCS_R2_net_connect}    ${EVPN_template}    ${R2_evpn_data}
+
+    CONFIGURE L2VPN    ${NCS_R2_net_connect}    ${NCS_R2_P1}.${sub_interface_4095}    ${L2VPN_template}    ${R2_l2vpn_data}
+
+    #verify L2VPN status R1
+
+    ${show_result}=    SHOW COMMAND    ${NCS_R1_net_connect}    show_L2VPN_template    ${R1_l2vpn_data}
+
+    log to console    ${show_result}
+
+    run keyword and continue on failure    should contain    ${show_result}    ${L2VPN_status}
+
+    #verify L2VPN status R2
+
+    ${show_result}=    SHOW COMMAND    ${NCS_R2_net_connect}    show_L2VPN_template    ${R2_l2vpn_data}
+
+    log to console    ${show_result}
+
+    run keyword and continue on failure    should contain    ${show_result}    ${L2VPN_status}
+
+    #configure CFM on R1 & R2
+
+    CONFIGURE CFM    ${NCS_R1_net_connect}    ${CFM_template}    ${R1_cfm_data}
+
+    CONFIGURE CFM    ${NCS_R2_net_connect}    ${CFM_template}    ${R2_cfm_data}
+
+    CONFIGURE CFM-INTF    ${NCS_R1_net_connect}    ${NCS_R1_P1}.${sub_interface_4095}    ${CFM_intf_template}    ${R1_cfm_data}
+
+    CONFIGURE CFM-INTF    ${NCS_R2_net_connect}    ${NCS_R2_P1}.${sub_interface_4095}    ${CFM_intf_template}    ${R2_cfm_data}
+
+    #verify the CFM status on R1 & R2
+
+    #wait 80 sec for CFM to exchnage msgs & come up
+
+    Sleep    80
+
+    ${show_result}=    SHOW COMMAND    ${NCS_R1_net_connect}    show_eth_cfm_template    ${R1_cfm_data}
+
+    log to console    ${show_result}
+
+    run keyword and continue on failure    should contain    ${show_result}    ${local_mep_info}
+
+    run keyword and continue on failure    should contain    ${show_result}    ${peer_mep_info}
+
+    ${show_result}=    SHOW COMMAND    ${NCS_R2_net_connect}    show_eth_cfm_template    ${R2_cfm_data}
+
+    log to console    ${show_result}
+
+    run keyword and continue on failure    should contain    ${show_result}    ${local_mep_info}
+
+    run keyword and continue on failure    should contain    ${show_result}    ${peer_mep_info}
+
+    #verify L2VPN status R1 !!!AGAIN!!!
+
+    ${show_result}=    SHOW COMMAND    ${NCS_R1_net_connect}    show_L2VPN_template    ${R1_l2vpn_data}
+
+    log to console    ${show_result}
+
+    run keyword and continue on failure    should contain    ${show_result}    ${L2VPN_status}
+
+    #verify L2VPN status R2 !!!AGAIN!!!
+
+    ${show_result}=    SHOW COMMAND    ${NCS_R2_net_connect}    show_L2VPN_template    ${R2_l2vpn_data}
+
+    log to console    ${show_result}
+
+    run keyword and continue on failure    should contain    ${show_result}    ${L2VPN_status}
+
+    #verify the CFM status on R1 & R2 again at the interval of 4 sec !!! to check CFM is not flapping!!!
+
+    ${show_result}=    SHOW COMMAND    ${NCS_R1_net_connect}    show_eth_cfm_template    ${R1_cfm_data}
+
+    log to console    ${show_result}
+
+    run keyword and continue on failure    should contain    ${show_result}    ${local_mep_info}
+
+    run keyword and continue on failure    should contain    ${show_result}    ${peer_mep_info}
+
+    ${show_result}=    SHOW COMMAND    ${NCS_R2_net_connect}    show_eth_cfm_template    ${R2_cfm_data}
+
+    log to console    ${show_result}
+
+    run keyword and continue on failure    should contain    ${show_result}    ${local_mep_info}
+
+    run keyword and continue on failure    should contain    ${show_result}    ${peer_mep_info}
+
+    Sleep    4
+
+    #check the CFM status again !!! to check flapping ater 4 sec !!!
+
+    ${show_result}=    SHOW COMMAND    ${NCS_R1_net_connect}    show_eth_cfm_template    ${R1_cfm_data}
+
+    log to console    ${show_result}
+
+    run keyword and continue on failure    should contain    ${show_result}    ${local_mep_info}
+
+    run keyword and continue on failure    should contain    ${show_result}    ${peer_mep_info}
+
+    ${show_result}=    SHOW COMMAND    ${NCS_R2_net_connect}    show_eth_cfm_template    ${R2_cfm_data}
+
+    log to console    ${show_result}
+
+    run keyword and continue on failure    should contain    ${show_result}    ${local_mep_info}
+
+    run keyword and continue on failure    should contain    ${show_result}    ${peer_mep_info}
+
+    # Send Traffic from Spirent
+
+    ${spirent_traffic}=    Spirent VLAN Transperancy Traffic Testing For P2P Service
+
+    log to console    Out Of Spirent
+
+    log to console    ${spirent_traffic}
+
+    run keyword and continue on failure    should not contain    ${spirent_traffic}    fail
+
+    SLEEP    10
+
+    #uncofigure all the paremeters - interface, sub-interface, CFM, evpn & l2vpn
+
+    UNCONFIGURE SUB-INTF    ${NCS_R1_net_connect}    ${NCS_R1_P1}.${sub_interface_4095}    ${Del_NCS_sub_int_template}    ${R1_sub_interface_data}
+
+    UNCONFIGURE SUB-INTF    ${NCS_R2_net_connect}    ${NCS_R2_P1}.${sub_interface_4095}    ${Del_NCS_sub_int_template}    ${R2_sub_interface_data}
+
+    UNCONFIGURE INTF    ${NCS_R1_net_connect}    ${NCS_R1_P1}    ${Del_NCS_int_template}    ${R1_interface_data}
+
+    UNCONFIGURE INTF    ${NCS_R2_net_connect}    ${NCS_R2_P1}    ${Del_NCS_int_template}    ${R2_interface_data}
+
+    UNCONFIGURE SERVICE-POLICY-MAP    ${NCS_R1_net_connect}    ${Del_Ser_Pol_map_template}    ${Ser_Pol_map_1G_data}
+
+    UNCONFIGURE SERVICE-POLICY-MAP    ${NCS_R2_net_connect}    ${Del_Ser_Pol_map_template}    ${Ser_Pol_map_1G_data}
+
+    UNCONFIGURE CFM    ${NCS_R1_net_connect}    ${Del_CFM_template}    ${R1_cfm_data}
+
+    UNCONFIGURE CFM    ${NCS_R2_net_connect}    ${Del_CFM_template}    ${R2_cfm_data}
+
+    UNCONFIGURE EVPN    ${NCS_R1_net_connect}    ${Del_EVPN_template}    ${R1_evpn_data}
+
+    UNCONFIGURE EVPN    ${NCS_R2_net_connect}    ${Del_EVPN_template}    ${R2_evpn_data}
+
+    UNCONFIGURE L2VPN    ${NCS_R1_net_connect}    ${Del_L2VPN_template}    ${R1_l2vpn_data}
+
+    UNCONFIGURE L2VPN    ${NCS_R2_net_connect}    ${Del_L2VPN_template}    ${R2_l2vpn_data}
+
+    log to console    END OF TEST CASE
+
+
+EPL_PTP_NCS-NCS_DefaultEncap_MAC_Transperency
+
+    [Tags]    EPL_PTP_NCS-NCS_DefaultEncap_MAC_Transperency
+
+    #configure Policy map egr on R1 & R2
+
+    CONFIGURE POLICY-MAP-EGR    ${NCS_R1_net_connect}    ${Pol_map_egr_template}    ${Pol_map_egr_data}
+
+    CONFIGURE POLICY-MAP-EGR    ${NCS_R2_net_connect}    ${Pol_map_egr_template}    ${Pol_map_egr_data}
+
+    #configure service Policy map ingress on R1 & R2
+
+    CONFIGURE SERVICE-POLICY-MAP    ${NCS_R1_net_connect}    ${Ser_Pol_map_template}    ${Ser_Pol_map_1G_data}
+
+    CONFIGURE SERVICE-POLICY-MAP    ${NCS_R2_net_connect}    ${Ser_Pol_map_template}    ${Ser_Pol_map_1G_data}
+
+    #configure interface on R1 & R2
+
+    CONFIGURE INTERFACE    ${NCS_R1_net_connect}    ${NCS_R1_P1}    ${NCS_int_template}    ${R1_interface_data}
+
+    CONFIGURE INTERFACE    ${NCS_R2_net_connect}    ${NCS_R2_P1}    ${NCS_int_template}    ${R2_interface_data}
+
+    #configure sub-interface on R1 & R2
+
+    CONFIGURE SUB-INTERFACE    ${NCS_R1_net_connect}    ${NCS_R1_P1}.${sub_interface_4095}    ${NCS_sub_int_template}    ${R1_sub_interface_data}
+
+    CONFIGURE SUB-INTERFACE    ${NCS_R2_net_connect}    ${NCS_R2_P1}.${sub_interface_4095}    ${NCS_sub_int_template}    ${R2_sub_interface_data}
+
+    #configure service Policy map on sub-intf in ingress
+
+    CONFIGURE SERVICE-POLICY-MAP-INTF    ${NCS_R1_net_connect}    ${NCS_R1_P1}.${sub_interface_4095}    ${Ser_Pol_map_intf_template}    ${Ser_Pol_map_1G_data}
+
+    CONFIGURE SERVICE-POLICY-MAP-INTF    ${NCS_R2_net_connect}    ${NCS_R2_P1}.${sub_interface_4095}    ${Ser_Pol_map_intf_template}    ${Ser_Pol_map_1G_data}
+
+    #verify status of main intf status R1
+
+    ${template_data}=    Create Dictionary    interface=${NCS_R1_P1}
+
+    ${show_result}=    SHOW COMMAND    ${NCS_R1_net_connect}    show_interface_template    ${template_data}
+
+    log to console    ${show_result}
+
+    run keyword and continue on failure    should contain    ${show_result}    ${intf_status}
+
+    #verify status of sub intf status R1
+
+    ${template_data}=    Create Dictionary    interface=${NCS_R1_P1}.${sub_interface_4095}
+
+    ${show_result}=    SHOW COMMAND    ${NCS_R1_net_connect}    show_interface_template    ${template_data}
+
+    log to console    ${show_result}
+
+    run keyword and continue on failure    should contain    ${show_result}    ${intf_status}
+
+    #verify status of main intf status R2
+
+    ${template_data}=    Create Dictionary    interface=${NCS_R2_P1}
+
+    ${show_result}=    SHOW COMMAND    ${NCS_R2_net_connect}    show_interface_template    ${template_data}
+
+    log to console    ${show_result}
+
+    run keyword and continue on failure    should contain    ${show_result}    ${intf_status}
+
+    #verify status of sub intf status R2
+
+    ${template_data}=    Create Dictionary    interface=${NCS_R2_P1}.${sub_interface_4095}
+
+    ${show_result}=    SHOW COMMAND    ${NCS_R2_net_connect}    show_interface_template    ${template_data}
+
+    log to console    ${show_result}
+
+    run keyword and continue on failure    should contain    ${show_result}    ${intf_status}
+
+    #configure EPL & L2VPN on R1 & R2
+
+    CONFIGURE EVPN    ${NCS_R1_net_connect}    ${EVPN_template}    ${R1_evpn_data}
+
+    CONFIGURE L2VPN    ${NCS_R1_net_connect}    ${NCS_R1_P1}.${sub_interface_4095}    ${L2VPN_template}    ${R1_l2vpn_data}
+
+    CONFIGURE EVPN    ${NCS_R2_net_connect}    ${EVPN_template}    ${R2_evpn_data}
+
+    CONFIGURE L2VPN    ${NCS_R2_net_connect}    ${NCS_R2_P1}.${sub_interface_4095}    ${L2VPN_template}    ${R2_l2vpn_data}
+
+    #verify L2VPN status R1
+
+    ${show_result}=    SHOW COMMAND    ${NCS_R1_net_connect}    show_L2VPN_template    ${R1_l2vpn_data}
+
+    log to console    ${show_result}
+
+    run keyword and continue on failure    should contain    ${show_result}    ${L2VPN_status}
+
+    #verify L2VPN status R2
+
+    ${show_result}=    SHOW COMMAND    ${NCS_R2_net_connect}    show_L2VPN_template    ${R2_l2vpn_data}
+
+    log to console    ${show_result}
+
+    run keyword and continue on failure    should contain    ${show_result}    ${L2VPN_status}
+
+    #configure CFM on R1 & R2
+
+    CONFIGURE CFM    ${NCS_R1_net_connect}    ${CFM_template}    ${R1_cfm_data}
+
+    CONFIGURE CFM    ${NCS_R2_net_connect}    ${CFM_template}    ${R2_cfm_data}
+
+    CONFIGURE CFM-INTF    ${NCS_R1_net_connect}    ${NCS_R1_P1}.${sub_interface_4095}    ${CFM_intf_template}    ${R1_cfm_data}
+
+    CONFIGURE CFM-INTF    ${NCS_R2_net_connect}    ${NCS_R2_P1}.${sub_interface_4095}    ${CFM_intf_template}    ${R2_cfm_data}
+
+    #verify the CFM status on R1 & R2
+
+    #wait 80 sec for CFM to exchnage msgs & come up
+
+    Sleep    80
+
+    ${show_result}=    SHOW COMMAND    ${NCS_R1_net_connect}    show_eth_cfm_template    ${R1_cfm_data}
+
+    log to console    ${show_result}
+
+    run keyword and continue on failure    should contain    ${show_result}    ${local_mep_info}
+
+    run keyword and continue on failure    should contain    ${show_result}    ${peer_mep_info}
+
+    ${show_result}=    SHOW COMMAND    ${NCS_R2_net_connect}    show_eth_cfm_template    ${R2_cfm_data}
+
+    log to console    ${show_result}
+
+    run keyword and continue on failure    should contain    ${show_result}    ${local_mep_info}
+
+    run keyword and continue on failure    should contain    ${show_result}    ${peer_mep_info}
+
+    #verify L2VPN status R1 !!!AGAIN!!!
+
+    ${show_result}=    SHOW COMMAND    ${NCS_R1_net_connect}    show_L2VPN_template    ${R1_l2vpn_data}
+
+    log to console    ${show_result}
+
+    run keyword and continue on failure    should contain    ${show_result}    ${L2VPN_status}
+
+    #verify L2VPN status R2 !!!AGAIN!!!
+
+    ${show_result}=    SHOW COMMAND    ${NCS_R2_net_connect}    show_L2VPN_template    ${R2_l2vpn_data}
+
+    log to console    ${show_result}
+
+    run keyword and continue on failure    should contain    ${show_result}    ${L2VPN_status}
+
+    #verify the CFM status on R1 & R2 again at the interval of 4 sec !!! to check CFM is not flapping!!!
+
+    ${show_result}=    SHOW COMMAND    ${NCS_R1_net_connect}    show_eth_cfm_template    ${R1_cfm_data}
+
+    log to console    ${show_result}
+
+    run keyword and continue on failure    should contain    ${show_result}    ${local_mep_info}
+
+    run keyword and continue on failure    should contain    ${show_result}    ${peer_mep_info}
+
+    ${show_result}=    SHOW COMMAND    ${NCS_R2_net_connect}    show_eth_cfm_template    ${R2_cfm_data}
+
+    log to console    ${show_result}
+
+    run keyword and continue on failure    should contain    ${show_result}    ${local_mep_info}
+
+    run keyword and continue on failure    should contain    ${show_result}    ${peer_mep_info}
+
+    Sleep    4
+
+    #check the CFM status again !!! to check flapping ater 4 sec !!!
+
+    ${show_result}=    SHOW COMMAND    ${NCS_R1_net_connect}    show_eth_cfm_template    ${R1_cfm_data}
+
+    log to console    ${show_result}
+
+    run keyword and continue on failure    should contain    ${show_result}    ${local_mep_info}
+
+    run keyword and continue on failure    should contain    ${show_result}    ${peer_mep_info}
+
+    ${show_result}=    SHOW COMMAND    ${NCS_R2_net_connect}    show_eth_cfm_template    ${R2_cfm_data}
+
+    log to console    ${show_result}
+
+    run keyword and continue on failure    should contain    ${show_result}    ${local_mep_info}
+
+    run keyword and continue on failure    should contain    ${show_result}    ${peer_mep_info}
+
+    # Send Traffic from Spirent
+
+    ${spirent_traffic}=    Spirent MAC Transperancy Traffic Testing For P2P Service
+
+    log to console    Out Of Spirent
+
+    log to console    ${spirent_traffic}
+
+    run keyword and continue on failure    should not contain    ${spirent_traffic}    fail
+
+    SLEEP    10
+
+    #uncofigure all the paremeters - interface, sub-interface, CFM, evpn & l2vpn
+
+    UNCONFIGURE SUB-INTF    ${NCS_R1_net_connect}    ${NCS_R1_P1}.${sub_interface_4095}    ${Del_NCS_sub_int_template}    ${R1_sub_interface_data}
+
+    UNCONFIGURE SUB-INTF    ${NCS_R2_net_connect}    ${NCS_R2_P1}.${sub_interface_4095}    ${Del_NCS_sub_int_template}    ${R2_sub_interface_data}
+
+    UNCONFIGURE INTF    ${NCS_R1_net_connect}    ${NCS_R1_P1}    ${Del_NCS_int_template}    ${R1_interface_data}
+
+    UNCONFIGURE INTF    ${NCS_R2_net_connect}    ${NCS_R2_P1}    ${Del_NCS_int_template}    ${R2_interface_data}
+
+    UNCONFIGURE SERVICE-POLICY-MAP    ${NCS_R1_net_connect}    ${Del_Ser_Pol_map_template}    ${Ser_Pol_map_1G_data}
+
+    UNCONFIGURE SERVICE-POLICY-MAP    ${NCS_R2_net_connect}    ${Del_Ser_Pol_map_template}    ${Ser_Pol_map_1G_data}
+
+    UNCONFIGURE CFM    ${NCS_R1_net_connect}    ${Del_CFM_template}    ${R1_cfm_data}
+
+    UNCONFIGURE CFM    ${NCS_R2_net_connect}    ${Del_CFM_template}    ${R2_cfm_data}
+
+    UNCONFIGURE EVPN    ${NCS_R1_net_connect}    ${Del_EVPN_template}    ${R1_evpn_data}
+
+    UNCONFIGURE EVPN    ${NCS_R2_net_connect}    ${Del_EVPN_template}    ${R2_evpn_data}
+
+    UNCONFIGURE L2VPN    ${NCS_R1_net_connect}    ${Del_L2VPN_template}    ${R1_l2vpn_data}
+
+    UNCONFIGURE L2VPN    ${NCS_R2_net_connect}    ${Del_L2VPN_template}    ${R2_l2vpn_data}
+
+    log to console    END OF TEST CASE
+
+
+EPL_PTP_NCS-NCS_MainIntf_L2CP_Transperency
+
+    [Tags]    EPL_PTP_NCS-NCS_MainIntf_L2CP_Transperency
+
+    #configure Policy map egr on R1 & R2
+
+    CONFIGURE POLICY-MAP-EGR    ${NCS_R1_net_connect}    ${Pol_map_egr_template}    ${Pol_map_egr_data}
+
+    CONFIGURE POLICY-MAP-EGR    ${NCS_R2_net_connect}    ${Pol_map_egr_template}    ${Pol_map_egr_data}
+
+    #configure service Policy map ingress on R1 & R2
+
+    CONFIGURE SERVICE-POLICY-MAP    ${NCS_R1_net_connect}    ${Ser_Pol_map_template}    ${Ser_Pol_map_1G_data}
+
+    CONFIGURE SERVICE-POLICY-MAP    ${NCS_R2_net_connect}    ${Ser_Pol_map_template}    ${Ser_Pol_map_1G_data}
+
+    #configure main interface on R1 & R2
+
+    CONFIGURE INTERFACE    ${NCS_R1_net_connect}    ${NCS_R1_P1}    ${NCS_main_int_template}    ${R1_interface_data}
+
+    CONFIGURE INTERFACE    ${NCS_R2_net_connect}    ${NCS_R2_P1}    ${NCS_main_int_template}    ${R2_interface_data}
+
+    #configure service Policy map on main-intf in ingress
+
+    CONFIGURE SERVICE-POLICY-MAP-INTF    ${NCS_R1_net_connect}    ${NCS_R1_P1}    ${Ser_Pol_map_main_intf_template}    ${Ser_Pol_map_1G_data}
+
+    CONFIGURE SERVICE-POLICY-MAP-INTF    ${NCS_R2_net_connect}    ${NCS_R2_P1}    ${Ser_Pol_map_main_intf_template}    ${Ser_Pol_map_1G_data}
+
+    #verify status of main intf status R1
+
+    ${template_data}=    Create Dictionary    interface=${NCS_R1_P1}
+
+    ${show_result}=    SHOW COMMAND    ${NCS_R1_net_connect}    show_interface_template    ${template_data}
+
+    log to console    ${show_result}
+
+    run keyword and continue on failure    should contain    ${show_result}    ${intf_status}
+
+    #verify status of main intf status R2
+
+    ${template_data}=    Create Dictionary    interface=${NCS_R2_P1}
+
+    ${show_result}=    SHOW COMMAND    ${NCS_R2_net_connect}    show_interface_template    ${template_data}
+
+    log to console    ${show_result}
+
+    run keyword and continue on failure    should contain    ${show_result}    ${intf_status}
+
+    #configure EPL & L2VPN on R1 & R2
+
+    CONFIGURE EVPN    ${NCS_R1_net_connect}    ${EVPN_template}    ${R1_evpn_data}
+
+    CONFIGURE L2VPN    ${NCS_R1_net_connect}    ${NCS_R1_P1}    ${L2VPN_template}    ${R1_l2vpn_data}
+
+    CONFIGURE EVPN    ${NCS_R2_net_connect}    ${EVPN_template}    ${R2_evpn_data}
+
+    CONFIGURE L2VPN    ${NCS_R2_net_connect}    ${NCS_R2_P1}    ${L2VPN_template}    ${R2_l2vpn_data}
+
+    #verify L2VPN status R1
+
+    ${show_result}=    SHOW COMMAND    ${NCS_R1_net_connect}    show_L2VPN_template    ${R1_l2vpn_data}
+
+    log to console    ${show_result}
+
+    run keyword and continue on failure    should contain    ${show_result}    ${L2VPN_status}
+
+    #verify L2VPN status R2
+
+    ${show_result}=    SHOW COMMAND    ${NCS_R2_net_connect}    show_L2VPN_template    ${R2_l2vpn_data}
+
+    log to console    ${show_result}
+
+    run keyword and continue on failure    should contain    ${show_result}    ${L2VPN_status}
+
+    #configure CFM on R1 & R2
+
+    CONFIGURE CFM    ${NCS_R1_net_connect}    ${CFM_template}    ${R1_cfm_data}
+
+    CONFIGURE CFM    ${NCS_R2_net_connect}    ${CFM_template}    ${R2_cfm_data}
+
+    CONFIGURE CFM-INTF    ${NCS_R1_net_connect}    ${NCS_R1_P1}    ${CFM_intf_template}    ${R1_cfm_data}
+
+    CONFIGURE CFM-INTF    ${NCS_R2_net_connect}    ${NCS_R2_P1}    ${CFM_intf_template}    ${R2_cfm_data}
+
+    #verify the CFM status on R1 & R2
+
+    #wait 80 sec for CFM to exchnage msgs & come up
+
+    Sleep    80
+
+    ${show_result}=    SHOW COMMAND    ${NCS_R1_net_connect}    show_eth_cfm_template    ${R1_cfm_data}
+
+    log to console    ${show_result}
+
+    run keyword and continue on failure    should contain    ${show_result}    ${local_mep_info}
+
+    run keyword and continue on failure    should contain    ${show_result}    ${peer_mep_info}
+
+    ${show_result}=    SHOW COMMAND    ${NCS_R2_net_connect}    show_eth_cfm_template    ${R2_cfm_data}
+
+    log to console    ${show_result}
+
+    run keyword and continue on failure    should contain    ${show_result}    ${local_mep_info}
+
+    run keyword and continue on failure    should contain    ${show_result}    ${peer_mep_info}
+
+    # Verify L2VPN status again
+
+    Sleep    10
+
+    #verify L2VPN status R1
+
+    ${show_result}=    SHOW COMMAND    ${NCS_R1_net_connect}    show_L2VPN_template    ${R1_l2vpn_data}
+
+    log to console    ${show_result}
+
+    run keyword and continue on failure    should contain    ${show_result}    ${L2VPN_status}
+
+    #verify L2VPN status R2
+
+    ${show_result}=    SHOW COMMAND    ${NCS_R2_net_connect}    show_L2VPN_template    ${R2_l2vpn_data}
+
+    log to console    ${show_result}
+
+    run keyword and continue on failure    should contain    ${show_result}    ${L2VPN_status}
+
+    # Verify CFM status again
+
+    Sleep    10
+
+    ${show_result}=    SHOW COMMAND    ${NCS_R1_net_connect}    show_eth_cfm_template    ${R1_cfm_data}
+
+    log to console    ${show_result}
+
+    run keyword and continue on failure    should contain    ${show_result}    ${local_mep_info}
+
+    run keyword and continue on failure    should contain    ${show_result}    ${peer_mep_info}
+
+    ${show_result}=    SHOW COMMAND    ${NCS_R2_net_connect}    show_eth_cfm_template    ${R2_cfm_data}
+
+    log to console    ${show_result}
+
+    run keyword and continue on failure    should contain    ${show_result}    ${local_mep_info}
+
+    run keyword and continue on failure    should contain    ${show_result}    ${peer_mep_info}
+
+    # Send Traffic from Spirent
+
+    ${spirent_traffic}=    Spirent L2CP Transperancy Traffic Testing For P2P Service
+
+    log to console    ${spirent_traffic}
+
+    run keyword and continue on failure    should not contain    ${spirent_traffic}    fail
+
+    SLEEP    10
+
+    #uncofigure all the paremeters - interface, sub-interface, CFM, evpn & l2vpn
+
+    UNCONFIGURE INTF    ${NCS_R1_net_connect}    ${NCS_R1_P1}    ${Del_NCS_int_template}    ${R1_interface_data}
+
+    UNCONFIGURE INTF    ${NCS_R2_net_connect}    ${NCS_R2_P1}    ${Del_NCS_int_template}    ${R2_interface_data}
+
+    UNCONFIGURE SERVICE-POLICY-MAP    ${NCS_R1_net_connect}    ${Del_Ser_Pol_map_template}    ${Ser_Pol_map_1G_data}
+
+    UNCONFIGURE SERVICE-POLICY-MAP    ${NCS_R2_net_connect}    ${Del_Ser_Pol_map_template}    ${Ser_Pol_map_1G_data}
+
+    UNCONFIGURE CFM    ${NCS_R1_net_connect}    ${Del_CFM_template}    ${R1_cfm_data}
+
+    UNCONFIGURE CFM    ${NCS_R2_net_connect}    ${Del_CFM_template}    ${R2_cfm_data}
+
+    UNCONFIGURE EVPN    ${NCS_R1_net_connect}    ${Del_EVPN_template}    ${R1_evpn_data}
+
+    UNCONFIGURE EVPN    ${NCS_R2_net_connect}    ${Del_EVPN_template}    ${R2_evpn_data}
+
+    UNCONFIGURE L2VPN    ${NCS_R1_net_connect}    ${Del_L2VPN_template}    ${R1_l2vpn_data}
+
+    UNCONFIGURE L2VPN    ${NCS_R2_net_connect}    ${Del_L2VPN_template}    ${R2_l2vpn_data}
+
+    log to console    END OF TEST CASE
+
+
 
 test
     [Tags]    test

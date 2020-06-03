@@ -6,8 +6,8 @@ sth_interface_config:
    duplex: 'full'
 
 Spirent_Port_Booking:
-   Port1: 9/3
-   Port2: 9/4
+   Port1: 11/6
+   Port2: 11/10
 
 Spirent_Test_Infrastructure:
    Number_of_ports: 2
