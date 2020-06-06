@@ -57,10 +57,10 @@ interface {{ component.sub_interface }} l2transport
  encapsulation {{ component.encapsulation1 }} 
  rewrite ingress tag pop 1 symmetric 
  {% elif component.service_type == 'Y' %}
- encapsulation {{ component.encapsulation1 }} second {{ component.encapsulation2 }}
+ encapsulation {{ component.encapsulation1 }} {{ component.encapsulation2 }}
  rewrite ingress tag pop 1 symmetric 
  {% elif component.service_type == 'D' %}
- encapsulation {{ component.encapsulation1 }} second {{ component.encapsulation2 }}
+ encapsulation {{ component.encapsulation1 }} {{ component.encapsulation2 }}
  {% endif %}
  no shutdown
 """
