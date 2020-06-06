@@ -18,21 +18,6 @@ R2_interface_data = {
 }
 
 
-# # Was in use earlier, when logic for P/F/X/Y/D wasn't developed. Will delete it later.
-# # Now template with logic is developed and P/F/X/Y/D can be created by single template.
-# R1_sub_interface_data = {
-#     'description': 'Ankit - Automation Test Service',
-#     'encapsulation': 'default'
-# }
-#
-#
-# R2_sub_interface_data = {
-#     'description': 'Ankit - Automation Test Service',
-#     'encapsulation': 'default'
-# }
-
-
-
 # service_type P = default   X = dot1ad/dot1q <Vlan-id>   Y = dot1q/dot1ad <Vlan-Id> second dot1q <Vlan-Id>   D = dot1q/dot1ad <Vlan-Id> second dot1q <Vlan-Id>   F = dot1ad/dot1q <Vlan-Id>
 
 R1_sub_interface_data = {
@@ -48,6 +33,51 @@ R2_sub_interface_data = {
     'encapsulation1': 'dot1q 101',  # 'dot1q or dot1ad <vlan>' // populate only for F/X/Y/D
     'encapsulation2': 'dot1q 102'   # 'dot1q or dot1ad <vlan>' // populate only for Y/D
 }
+
+## Added on 5th June 2020
+
+
+R1_sub_interface_X_data = {
+    'description': 'Ankit - Automation Test Service X',
+    'service_type': 'X',            # P/F/X/Y/D
+    'encapsulation1': 'dot1q 49'  #dot1q or dot1ad <vlan> // populate only for F/X/Y/D
+}
+
+R1_sub_interface_F_data = {
+    'description': 'Ankit - Automation Test Service F',
+    'service_type': 'F',            # P/F/X/Y/D
+    'encapsulation1': 'dot1q 49'  #dot1q or dot1ad <vlan> // populate only for F/X/Y/D
+}
+
+
+R1_sub_interface_Y_data = {
+    'description': 'Ankit - Automation Test Service Y',
+    'service_type': 'Y',            # P/F/X/Y/D
+    'encapsulation1': 'dot1ad 50',  #dot1q or dot1ad <vlan> // populate only for F/X/Y/D
+    'encapsulation2': 'dot1q 49'   #dot1q or dot1ad <vlan> // populate only for Y/D
+}
+
+
+R2_sub_interface_X_data = {
+    'description': 'Ankit - Automation Test Service X',
+    'service_type': 'X',            # P/F/X/Y/D
+    'encapsulation1': 'dot1q 50'  #dot1q or dot1ad <vlan> // populate only for F/X/Y/D
+}
+
+R2_sub_interface_F_data = {
+    'description': 'Ankit - Automation Test Service F',
+    'service_type': 'F',            # P/F/X/Y/D
+    'encapsulation1': 'dot1q 49'  #dot1q or dot1ad <vlan> // populate only for F/X/Y/D
+}
+
+
+R2_sub_interface_Y_data = {
+    'description': 'Ankit - Automation Test Service Y',
+    'service_type': 'Y',            # P/F/X/Y/D
+    'encapsulation1': 'dot1ad 50',  #dot1q or dot1ad <vlan> // populate only for F/X/Y/D
+    'encapsulation2': 'dot1q 49'   #dot1q or dot1ad <vlan> // populate only for Y/D
+}
+
 
 Pol_map_egr_data = {
     'output_policy' : 'egr'
@@ -133,7 +163,7 @@ LLF_data = {}
 
 # When ever new sub-interface is required, it will added here. No logic is developed to create sub-int from vlan (maybe in future we create that logic).
 sub_interface_4095 = '4095'     # For encapsulation default
-sub_interface_100 = '100'
+sub_interface_49 = '49'         # For X/Y/F
 sub_interface_4097 = '4097'
 
 
