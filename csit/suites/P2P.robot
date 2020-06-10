@@ -1528,190 +1528,190 @@ EVPL_PTP_NCS-NCS_XtoX
 
     log to console  Configure Policy map/Interface
 
-    #configure Policy map egr on NCS_R1 & NCS_R2
-    CONFIGURE POLICY-MAP-EGR    ${NCS_R1_net_connect}    ${Pol_map_egr_template}    ${Pol_map_egr_data}
-    CONFIGURE POLICY-MAP-EGR    ${NCS_R2_net_connect}    ${Pol_map_egr_template}    ${Pol_map_egr_data}
-    #configure service Policy map ingress on NCS_R1 & NCS_R2
-    CONFIGURE SERVICE-POLICY-MAP    ${NCS_R1_net_connect}    ${Ser_Pol_map_template}    ${Ser_Pol_map_1G_data}
-    CONFIGURE SERVICE-POLICY-MAP    ${NCS_R2_net_connect}    ${Ser_Pol_map_template}    ${Ser_Pol_map_1G_data}
-    #configure interface on NCS_R1 & NCS_R2
-    CONFIGURE INTERFACE    ${NCS_R1_net_connect}    ${NCS_R1_P1}    ${NCS_int_template}    ${R1_interface_data}
-    CONFIGURE INTERFACE    ${NCS_R2_net_connect}    ${NCS_R2_P1}    ${NCS_int_template}    ${R2_interface_data}
-    #configure sub-interface on NCS_R1 & NCS_R2
-    CONFIGURE SUB-INTERFACE    ${NCS_R1_net_connect}    ${NCS_R1_P1}.${sub_interface_49}    ${NCS_sub_int_template}    ${R1_sub_interface_X_data}
-    CONFIGURE SUB-INTERFACE    ${NCS_R2_net_connect}    ${NCS_R2_P1}.${sub_interface_49}    ${NCS_sub_int_template}    ${R2_sub_interface_X_data}
-    #configure service Policy map on sub-intf in ingress
-    CONFIGURE SERVICE-POLICY-MAP-INTF    ${NCS_R1_net_connect}    ${NCS_R1_P1}.${sub_interface_49}    ${Ser_Pol_map_intf_template}    ${Ser_Pol_map_1G_data}
-    CONFIGURE SERVICE-POLICY-MAP-INTF    ${NCS_R2_net_connect}    ${NCS_R2_P1}.${sub_interface_49}    ${Ser_Pol_map_intf_template}    ${Ser_Pol_map_1G_data}
-
-
-    log to console  Verify interface
-
-    #verify status of main intf status NCS_R1
-    ${template_data}=    Create Dictionary    interface=${NCS_R1_P1}
-    ${show_result}=    SHOW COMMAND    ${NCS_R1_net_connect}    show_interface_template    ${template_data}
-    log to console    ${show_result}
-    run keyword and continue on failure    should contain    ${show_result}    ${intf_status}
-    #verify status of sub intf status NCS_R1
-    ${template_data}=    Create Dictionary    interface=${NCS_R1_P1}.${sub_interface_49}
-    ${show_result}=    SHOW COMMAND    ${NCS_R1_net_connect}    show_interface_template    ${template_data}
-    log to console    ${show_result}
-    run keyword and continue on failure    should contain    ${show_result}    ${intf_status}
-    #verify status of main intf status NCS_R2
-    ${template_data}=    Create Dictionary    interface=${NCS_R2_P1}
-    ${show_result}=    SHOW COMMAND    ${NCS_R2_net_connect}    show_interface_template    ${template_data}
-    log to console    ${show_result}
-    run keyword and continue on failure    should contain    ${show_result}    ${intf_status}
-    #verify status of sub intf status NCS_R2
-    ${template_data}=    Create Dictionary    interface=${NCS_R2_P1}.${sub_interface_49}
-    ${show_result}=    SHOW COMMAND    ${NCS_R2_net_connect}    show_interface_template    ${template_data}
-    log to console    ${show_result}
-    run keyword and continue on failure    should contain    ${show_result}    ${intf_status}
-
-    log to console   Configure EVPN/L2VPN
-
-    #configure EVPN & L2VPN on NCS_R1 & NCS_R2
-    CONFIGURE EVPN    ${NCS_R1_net_connect}    ${EVPN_template}    ${R1_evpn_data}
-    CONFIGURE L2VPN    ${NCS_R1_net_connect}    ${NCS_R1_P1}.${sub_interface_49}    ${L2VPN_template}    ${R1_l2vpn_data}
-    CONFIGURE EVPN    ${NCS_R2_net_connect}    ${EVPN_template}    ${R2_evpn_data}
-    CONFIGURE L2VPN    ${NCS_R2_net_connect}    ${NCS_R2_P1}.${sub_interface_49}    ${L2VPN_template}    ${R2_l2vpn_data}
-
-    #verify L2VPN status NCS_R1
-    ${show_result}=    SHOW COMMAND    ${NCS_R1_net_connect}    show_L2VPN_template    ${R1_l2vpn_data}
-    log to console    ${show_result}
-    run keyword and continue on failure    should contain    ${show_result}    ${L2VPN_status}
-    #verify L2VPN status NCS_R2
-    ${show_result}=    SHOW COMMAND    ${NCS_R2_net_connect}    show_L2VPN_template    ${R2_l2vpn_data}
-    log to console    ${show_result}
-    run keyword and continue on failure    should contain    ${show_result}    ${L2VPN_status}
-
-    log to console  Configure CFM
-
-    #configure CFM on NCS_R1 & NCS_R2
-    CONFIGURE CFM    ${NCS_R1_net_connect}    ${CFM_template}    ${R1_cfm_data}
-    CONFIGURE CFM    ${NCS_R2_net_connect}    ${CFM_template}    ${R2_cfm_data}
-    CONFIGURE CFM-INTF    ${NCS_R1_net_connect}    ${NCS_R1_P1}.${sub_interface_49}    ${CFM_intf_template}    ${R1_cfm_data}
-    CONFIGURE CFM-INTF    ${NCS_R2_net_connect}    ${NCS_R2_P1}.${sub_interface_49}    ${CFM_intf_template}    ${R2_cfm_data}
-    #verify the CFM status on NCS_R1 & NCS_R2
-    #wait 80 sec for CFM to exchnage msgs & come up
-    Sleep   80
-    ${show_result}=    SHOW COMMAND    ${NCS_R1_net_connect}    show_eth_cfm_template    ${R1_cfm_data}
-    log to console    ${show_result}
-    run keyword and continue on failure    should contain    ${show_result}    ${local_mep_info}
-    run keyword and continue on failure    should contain    ${show_result}    ${peer_mep_info}
-    ${show_result}=    SHOW COMMAND    ${NCS_R2_net_connect}    show_eth_cfm_template    ${R2_cfm_data}
-    log to console    ${show_result}
-    run keyword and continue on failure    should contain    ${show_result}    ${local_mep_info}
-    run keyword and continue on failure    should contain    ${show_result}    ${peer_mep_info}
-
-    log to console  Verify L2VPN and CFM few times to ensure no flapping
-
-    #verify L2VPN status NCS_R1 !!!AGAIN!!!
-    ${show_result}=    SHOW COMMAND    ${NCS_R1_net_connect}    show_L2VPN_template    ${R1_l2vpn_data}
-    log to console    ${show_result}
-    run keyword and continue on failure    should contain    ${show_result}    ${L2VPN_status}
-    #verify L2VPN status NCS_R2 !!!AGAIN!!!
-    ${show_result}=    SHOW COMMAND    ${NCS_R2_net_connect}    show_L2VPN_template    ${R2_l2vpn_data}
-    log to console    ${show_result}
-    run keyword and continue on failure    should contain    ${show_result}    ${L2VPN_status}
-
-    #verify the CFM status on NCS_R1 & NCS_R2 again at the interval of 4 sec !!! to check CFM is not flapping!!!
-    ${show_result}=    SHOW COMMAND    ${NCS_R1_net_connect}    show_eth_cfm_template    ${R1_cfm_data}
-    log to console    ${show_result}
-    run keyword and continue on failure    should contain    ${show_result}    ${local_mep_info}
-    run keyword and continue on failure    should contain    ${show_result}    ${peer_mep_info}
-    ${show_result}=    SHOW COMMAND    ${NCS_R2_net_connect}    show_eth_cfm_template    ${R2_cfm_data}
-    log to console    ${show_result}
-    run keyword and continue on failure    should contain    ${show_result}    ${local_mep_info}
-    run keyword and continue on failure    should contain    ${show_result}    ${peer_mep_info}
-    Sleep   4
-
-    #check the CFM status again !!! to check flapping ater 4 sec !!!
-    ${show_result}=    SHOW COMMAND    ${NCS_R1_net_connect}    show_eth_cfm_template    ${R1_cfm_data}
-    log to console    ${show_result}
-    run keyword and continue on failure    should contain    ${show_result}    ${local_mep_info}
-    run keyword and continue on failure    should contain    ${show_result}    ${peer_mep_info}
-    ${show_result}=    SHOW COMMAND    ${NCS_R2_net_connect}    show_eth_cfm_template    ${R2_cfm_data}
-    log to console    ${show_result}
-    run keyword and continue on failure    should contain    ${show_result}    ${local_mep_info}
-    run keyword and continue on failure    should contain    ${show_result}    ${peer_mep_info}
-
-    log to console  Verify SLM/DMM
-
-    # verify the SLM/DMM status on NCS_R1
-    sleep  400
-    ${template_data}=    Create Dictionary    interface=${NCS_R1_P1}.${sub_interface_49}
-    ${show_result}=    SHOW COMMAND    ${NCS_R1_net_connect}    show_SLA_template    ${template_data}
-    log to console    ${show_result}
-    run keyword and continue on failure    should contain    ${show_result}    ${SLM_status}
-
-#    log to console  Send 100 Mbps Traffic
+#    #configure Policy map egr on NCS_R1 & NCS_R2
+#    CONFIGURE POLICY-MAP-EGR    ${NCS_R1_net_connect}    ${Pol_map_egr_template}    ${Pol_map_egr_data}
+#    CONFIGURE POLICY-MAP-EGR    ${NCS_R2_net_connect}    ${Pol_map_egr_template}    ${Pol_map_egr_data}
+#    #configure service Policy map ingress on NCS_R1 & NCS_R2
+#    CONFIGURE SERVICE-POLICY-MAP    ${NCS_R1_net_connect}    ${Ser_Pol_map_template}    ${Ser_Pol_map_1G_data}
+#    CONFIGURE SERVICE-POLICY-MAP    ${NCS_R2_net_connect}    ${Ser_Pol_map_template}    ${Ser_Pol_map_1G_data}
+#    #configure interface on NCS_R1 & NCS_R2
+#    CONFIGURE INTERFACE    ${NCS_R1_net_connect}    ${NCS_R1_P1}    ${NCS_int_template}    ${R1_interface_data}
+#    CONFIGURE INTERFACE    ${NCS_R2_net_connect}    ${NCS_R2_P1}    ${NCS_int_template}    ${R2_interface_data}
+#    #configure sub-interface on NCS_R1 & NCS_R2
+#    CONFIGURE SUB-INTERFACE    ${NCS_R1_net_connect}    ${NCS_R1_P1}.${sub_interface_49}    ${NCS_sub_int_template}    ${R1_sub_interface_X_data}
+#    CONFIGURE SUB-INTERFACE    ${NCS_R2_net_connect}    ${NCS_R2_P1}.${sub_interface_49}    ${NCS_sub_int_template}    ${R2_sub_interface_X_data}
+#    #configure service Policy map on sub-intf in ingress
+#    CONFIGURE SERVICE-POLICY-MAP-INTF    ${NCS_R1_net_connect}    ${NCS_R1_P1}.${sub_interface_49}    ${Ser_Pol_map_intf_template}    ${Ser_Pol_map_1G_data}
+#    CONFIGURE SERVICE-POLICY-MAP-INTF    ${NCS_R2_net_connect}    ${NCS_R2_P1}.${sub_interface_49}    ${Ser_Pol_map_intf_template}    ${Ser_Pol_map_1G_data}
 #
-#    # Send Traffic from Spirent 100 Mbps
-#    ${spirent_traffic}=    L2_100M_F1500_Traffic
-#    log to console  ${spirent_traffic}
-#    run keyword and continue on failure    should not contain    ${spirent_traffic}    fail
-#    SLEEP  30
-
-    # show command for policy map counter on NCS_R1
-    ${template_data}=    Create Dictionary    interface=${NCS_R1_P1}.${sub_interface_49}
-    ${show_result}=    SHOW COMMAND    ${NCS_R1_net_connect}    show_pol_map_int    ${template_data}
-    log to console    ${show_result}
-
-    # show command for policy map counter on NCS_R2
-    ${template_data}=    Create Dictionary    interface=${NCS_R2_P1}.${sub_interface_49}
-    ${show_result}=    SHOW COMMAND    ${NCS_R2_net_connect}    show_pol_map_int    ${template_data}
-    log to console    ${show_result}
-
-#    log to console  Send 1 Gbps Traffic
 #
-#    # Send Traffic from Spirent 1 Gbps
-#    ${spirent_traffic}=    L2_1G_F1500Traffic
-#    log to console  ${spirent_traffic}
-#    run keyword and continue on failure    should not contain    ${spirent_traffic}    fail
-#    SLEEP  30
-
-    # show command for policy map counter
-    ## show policy map on NCS_R1
-    ${template_data}=    Create Dictionary    interface=${NCS_R1_P1}.${sub_interface_49}
-    ${show_result}=    SHOW COMMAND    ${NCS_R1_net_connect}    show_pol_map_int    ${template_data}
-    log to console    ${show_result}
-
-    ## show policy map on NCS_R2
-    ${template_data}=    Create Dictionary    interface=${NCS_R2_P1}.${sub_interface_49}
-    ${show_result}=    SHOW COMMAND    ${NCS_R2_net_connect}    show_pol_map_int    ${template_data}
-    log to console    ${show_result}
-
-    log to console  Modify Policer to 500 Mbps from 1 Gbps
-    # Modify Policer #
-    ##################
-
-    #configure service Policy map ingress on NCS_R1 & NCS_R2 (500 Mbps)
-    CONFIGURE SERVICE-POLICY-MAP    ${NCS_R1_net_connect}    ${Ser_Pol_map_template}    ${Ser_Pol_map_500M_data}
-    CONFIGURE SERVICE-POLICY-MAP    ${NCS_R2_net_connect}    ${Ser_Pol_map_template}    ${Ser_Pol_map_500M_data}
-
-    #Modify service Policy map on sub-intf in ingress on NCS_R1 and NCS_R2
-    CONFIGURE SERVICE-POLICY-MAP-INTF    ${NCS_R1_net_connect}    ${NCS_R1_P1}.${sub_interface_49}    ${Ser_Pol_map_intf_template}    ${Ser_Pol_map_500M_data}
-    CONFIGURE SERVICE-POLICY-MAP-INTF    ${NCS_R2_net_connect}    ${NCS_R2_P1}.${sub_interface_49}    ${Ser_Pol_map_intf_template}    ${Ser_Pol_map_500M_data}
-
-#    log to console  send 100 Mbps (No Drop expected)
+#    log to console  Verify interface
 #
-#    # Send Traffic from Spirent 100 Mbps
-#    ${spirent_traffic}=    L2_100M_F1500_Traffic
-#    log to console  ${spirent_traffic}
-#    run keyword and continue on failure    should not contain    ${spirent_traffic}    fail
-#    SLEEP  30
-
-    # show command for policy map counter
-    ## show policy map on NCS_R1
-    ${template_data}=    Create Dictionary    interface=${NCS_R1_P1}.${sub_interface_49}
-    ${show_result}=    SHOW COMMAND    ${NCS_R1_net_connect}    show_pol_map_int    ${template_data}
-    log to console    ${show_result}
-
-    ## show policy map on NCS_R2
-    ${template_data}=    Create Dictionary    interface=${NCS_R2_P1}.${sub_interface_49}
-    ${show_result}=    SHOW COMMAND    ${NCS_R2_net_connect}    show_pol_map_int    ${template_data}
-    log to console    ${show_result}
+#    #verify status of main intf status NCS_R1
+#    ${template_data}=    Create Dictionary    interface=${NCS_R1_P1}
+#    ${show_result}=    SHOW COMMAND    ${NCS_R1_net_connect}    show_interface_template    ${template_data}
+#    log to console    ${show_result}
+#    run keyword and continue on failure    should contain    ${show_result}    ${intf_status}
+#    #verify status of sub intf status NCS_R1
+#    ${template_data}=    Create Dictionary    interface=${NCS_R1_P1}.${sub_interface_49}
+#    ${show_result}=    SHOW COMMAND    ${NCS_R1_net_connect}    show_interface_template    ${template_data}
+#    log to console    ${show_result}
+#    run keyword and continue on failure    should contain    ${show_result}    ${intf_status}
+#    #verify status of main intf status NCS_R2
+#    ${template_data}=    Create Dictionary    interface=${NCS_R2_P1}
+#    ${show_result}=    SHOW COMMAND    ${NCS_R2_net_connect}    show_interface_template    ${template_data}
+#    log to console    ${show_result}
+#    run keyword and continue on failure    should contain    ${show_result}    ${intf_status}
+#    #verify status of sub intf status NCS_R2
+#    ${template_data}=    Create Dictionary    interface=${NCS_R2_P1}.${sub_interface_49}
+#    ${show_result}=    SHOW COMMAND    ${NCS_R2_net_connect}    show_interface_template    ${template_data}
+#    log to console    ${show_result}
+#    run keyword and continue on failure    should contain    ${show_result}    ${intf_status}
+#
+#    log to console   Configure EVPN/L2VPN
+#
+#    #configure EVPN & L2VPN on NCS_R1 & NCS_R2
+#    CONFIGURE EVPN    ${NCS_R1_net_connect}    ${EVPN_template}    ${R1_evpn_data}
+#    CONFIGURE L2VPN    ${NCS_R1_net_connect}    ${NCS_R1_P1}.${sub_interface_49}    ${L2VPN_template}    ${R1_l2vpn_data}
+#    CONFIGURE EVPN    ${NCS_R2_net_connect}    ${EVPN_template}    ${R2_evpn_data}
+#    CONFIGURE L2VPN    ${NCS_R2_net_connect}    ${NCS_R2_P1}.${sub_interface_49}    ${L2VPN_template}    ${R2_l2vpn_data}
+#
+#    #verify L2VPN status NCS_R1
+#    ${show_result}=    SHOW COMMAND    ${NCS_R1_net_connect}    show_L2VPN_template    ${R1_l2vpn_data}
+#    log to console    ${show_result}
+#    run keyword and continue on failure    should contain    ${show_result}    ${L2VPN_status}
+#    #verify L2VPN status NCS_R2
+#    ${show_result}=    SHOW COMMAND    ${NCS_R2_net_connect}    show_L2VPN_template    ${R2_l2vpn_data}
+#    log to console    ${show_result}
+#    run keyword and continue on failure    should contain    ${show_result}    ${L2VPN_status}
+#
+#    log to console  Configure CFM
+#
+#    #configure CFM on NCS_R1 & NCS_R2
+#    CONFIGURE CFM    ${NCS_R1_net_connect}    ${CFM_template}    ${R1_cfm_data}
+#    CONFIGURE CFM    ${NCS_R2_net_connect}    ${CFM_template}    ${R2_cfm_data}
+#    CONFIGURE CFM-INTF    ${NCS_R1_net_connect}    ${NCS_R1_P1}.${sub_interface_49}    ${CFM_intf_template}    ${R1_cfm_data}
+#    CONFIGURE CFM-INTF    ${NCS_R2_net_connect}    ${NCS_R2_P1}.${sub_interface_49}    ${CFM_intf_template}    ${R2_cfm_data}
+#    #verify the CFM status on NCS_R1 & NCS_R2
+#    #wait 80 sec for CFM to exchnage msgs & come up
+#    Sleep   80
+#    ${show_result}=    SHOW COMMAND    ${NCS_R1_net_connect}    show_eth_cfm_template    ${R1_cfm_data}
+#    log to console    ${show_result}
+#    run keyword and continue on failure    should contain    ${show_result}    ${local_mep_info}
+#    run keyword and continue on failure    should contain    ${show_result}    ${peer_mep_info}
+#    ${show_result}=    SHOW COMMAND    ${NCS_R2_net_connect}    show_eth_cfm_template    ${R2_cfm_data}
+#    log to console    ${show_result}
+#    run keyword and continue on failure    should contain    ${show_result}    ${local_mep_info}
+#    run keyword and continue on failure    should contain    ${show_result}    ${peer_mep_info}
+#
+#    log to console  Verify L2VPN and CFM few times to ensure no flapping
+#
+#    #verify L2VPN status NCS_R1 !!!AGAIN!!!
+#    ${show_result}=    SHOW COMMAND    ${NCS_R1_net_connect}    show_L2VPN_template    ${R1_l2vpn_data}
+#    log to console    ${show_result}
+#    run keyword and continue on failure    should contain    ${show_result}    ${L2VPN_status}
+#    #verify L2VPN status NCS_R2 !!!AGAIN!!!
+#    ${show_result}=    SHOW COMMAND    ${NCS_R2_net_connect}    show_L2VPN_template    ${R2_l2vpn_data}
+#    log to console    ${show_result}
+#    run keyword and continue on failure    should contain    ${show_result}    ${L2VPN_status}
+#
+#    #verify the CFM status on NCS_R1 & NCS_R2 again at the interval of 4 sec !!! to check CFM is not flapping!!!
+#    ${show_result}=    SHOW COMMAND    ${NCS_R1_net_connect}    show_eth_cfm_template    ${R1_cfm_data}
+#    log to console    ${show_result}
+#    run keyword and continue on failure    should contain    ${show_result}    ${local_mep_info}
+#    run keyword and continue on failure    should contain    ${show_result}    ${peer_mep_info}
+#    ${show_result}=    SHOW COMMAND    ${NCS_R2_net_connect}    show_eth_cfm_template    ${R2_cfm_data}
+#    log to console    ${show_result}
+#    run keyword and continue on failure    should contain    ${show_result}    ${local_mep_info}
+#    run keyword and continue on failure    should contain    ${show_result}    ${peer_mep_info}
+#    Sleep   4
+#
+#    #check the CFM status again !!! to check flapping ater 4 sec !!!
+#    ${show_result}=    SHOW COMMAND    ${NCS_R1_net_connect}    show_eth_cfm_template    ${R1_cfm_data}
+#    log to console    ${show_result}
+#    run keyword and continue on failure    should contain    ${show_result}    ${local_mep_info}
+#    run keyword and continue on failure    should contain    ${show_result}    ${peer_mep_info}
+#    ${show_result}=    SHOW COMMAND    ${NCS_R2_net_connect}    show_eth_cfm_template    ${R2_cfm_data}
+#    log to console    ${show_result}
+#    run keyword and continue on failure    should contain    ${show_result}    ${local_mep_info}
+#    run keyword and continue on failure    should contain    ${show_result}    ${peer_mep_info}
+#
+#    log to console  Verify SLM/DMM
+#
+#    # verify the SLM/DMM status on NCS_R1
+#    sleep  400
+#    ${template_data}=    Create Dictionary    interface=${NCS_R1_P1}.${sub_interface_49}
+#    ${show_result}=    SHOW COMMAND    ${NCS_R1_net_connect}    show_SLA_template    ${template_data}
+#    log to console    ${show_result}
+#    run keyword and continue on failure    should contain    ${show_result}    ${SLM_status}
+#
+##    log to console  Send 100 Mbps Traffic
+##
+##    # Send Traffic from Spirent 100 Mbps
+##    ${spirent_traffic}=    L2_100M_F1500_Traffic
+##    log to console  ${spirent_traffic}
+##    run keyword and continue on failure    should not contain    ${spirent_traffic}    fail
+##    SLEEP  30
+#
+#    # show command for policy map counter on NCS_R1
+#    ${template_data}=    Create Dictionary    interface=${NCS_R1_P1}.${sub_interface_49}
+#    ${show_result}=    SHOW COMMAND    ${NCS_R1_net_connect}    show_pol_map_int    ${template_data}
+#    log to console    ${show_result}
+#
+#    # show command for policy map counter on NCS_R2
+#    ${template_data}=    Create Dictionary    interface=${NCS_R2_P1}.${sub_interface_49}
+#    ${show_result}=    SHOW COMMAND    ${NCS_R2_net_connect}    show_pol_map_int    ${template_data}
+#    log to console    ${show_result}
+#
+##    log to console  Send 1 Gbps Traffic
+##
+##    # Send Traffic from Spirent 1 Gbps
+##    ${spirent_traffic}=    L2_1G_F1500Traffic
+##    log to console  ${spirent_traffic}
+##    run keyword and continue on failure    should not contain    ${spirent_traffic}    fail
+##    SLEEP  30
+#
+#    # show command for policy map counter
+#    ## show policy map on NCS_R1
+#    ${template_data}=    Create Dictionary    interface=${NCS_R1_P1}.${sub_interface_49}
+#    ${show_result}=    SHOW COMMAND    ${NCS_R1_net_connect}    show_pol_map_int    ${template_data}
+#    log to console    ${show_result}
+#
+#    ## show policy map on NCS_R2
+#    ${template_data}=    Create Dictionary    interface=${NCS_R2_P1}.${sub_interface_49}
+#    ${show_result}=    SHOW COMMAND    ${NCS_R2_net_connect}    show_pol_map_int    ${template_data}
+#    log to console    ${show_result}
+#
+#    log to console  Modify Policer to 500 Mbps from 1 Gbps
+#    # Modify Policer #
+#    ##################
+#
+#    #configure service Policy map ingress on NCS_R1 & NCS_R2 (500 Mbps)
+#    CONFIGURE SERVICE-POLICY-MAP    ${NCS_R1_net_connect}    ${Ser_Pol_map_template}    ${Ser_Pol_map_500M_data}
+#    CONFIGURE SERVICE-POLICY-MAP    ${NCS_R2_net_connect}    ${Ser_Pol_map_template}    ${Ser_Pol_map_500M_data}
+#
+#    #Modify service Policy map on sub-intf in ingress on NCS_R1 and NCS_R2
+#    CONFIGURE SERVICE-POLICY-MAP-INTF    ${NCS_R1_net_connect}    ${NCS_R1_P1}.${sub_interface_49}    ${Ser_Pol_map_intf_template}    ${Ser_Pol_map_500M_data}
+#    CONFIGURE SERVICE-POLICY-MAP-INTF    ${NCS_R2_net_connect}    ${NCS_R2_P1}.${sub_interface_49}    ${Ser_Pol_map_intf_template}    ${Ser_Pol_map_500M_data}
+#
+##    log to console  send 100 Mbps (No Drop expected)
+##
+##    # Send Traffic from Spirent 100 Mbps
+##    ${spirent_traffic}=    L2_100M_F1500_Traffic
+##    log to console  ${spirent_traffic}
+##    run keyword and continue on failure    should not contain    ${spirent_traffic}    fail
+##    SLEEP  30
+#
+#    # show command for policy map counter
+#    ## show policy map on NCS_R1
+#    ${template_data}=    Create Dictionary    interface=${NCS_R1_P1}.${sub_interface_49}
+#    ${show_result}=    SHOW COMMAND    ${NCS_R1_net_connect}    show_pol_map_int    ${template_data}
+#    log to console    ${show_result}
+#
+#    ## show policy map on NCS_R2
+#    ${template_data}=    Create Dictionary    interface=${NCS_R2_P1}.${sub_interface_49}
+#    ${show_result}=    SHOW COMMAND    ${NCS_R2_net_connect}    show_pol_map_int    ${template_data}
+#    log to console    ${show_result}
 
 #    log to console  send 1 Gbps (Drop expected)
 #
@@ -1723,31 +1723,60 @@ EVPL_PTP_NCS-NCS_XtoX
 
     # show command for policy map counter
     ## show policy map on NCS_R1
-    ${template_data}=    Create Dictionary    interface=${NCS_R1_P1}.${sub_interface_49}
-    ${show_result}=    SHOW COMMAND    ${NCS_R1_net_connect}    show_pol_map_int    ${template_data}
-    log to console    ${show_result}
-    ## show policy map on NCS_R2
-    ${template_data}=    Create Dictionary    interface=${NCS_R2_P1}.${sub_interface_49}
-    ${show_result}=    SHOW COMMAND    ${NCS_R2_net_connect}    show_pol_map_int    ${template_data}
-    log to console    ${show_result}
+#    ${template_data}=    Create Dictionary    interface=${NCS_R1_P1}.${sub_interface_49}
+#    ${show_result}=    SHOW COMMAND    ${NCS_R1_net_connect}    show_pol_map_int    ${template_data}
+#    log to console    ${show_result}
+#    ## show policy map on NCS_R2
+#    ${template_data}=    Create Dictionary    interface=${NCS_R2_P1}.${sub_interface_49}
+#    ${show_result}=    SHOW COMMAND    ${NCS_R2_net_connect}    show_pol_map_int    ${template_data}
+#    log to console    ${show_result}
+#
+
+    log to console  Configure L1 Loopback
+## L1 Loopback on NCS_R2
+    CONFIGURE L1-LOOPBACK    ${NCS_R2_net_connect}    ${NCS_R2_P1}    ${L1_loopback_template}    ${R2_sub_interface_X_data}
+    # Send Traffic for FF Loopback
+    ${spirent_traffic}=    XX_Loopback_Traffic
+    log to console  ${spirent_traffic}
+    run keyword and continue on failure    should not contain  ${spirent_traffic}    fail
+    SLEEP  30
+
+    log to console  Unconfigure L1 Loopback
+    UNCONFIGURE L1-LOOPBACK    ${NCS_R2_net_connect}    ${NCS_R2_P1}    ${Del_L1_loopback_template}    ${R2_sub_interface_X_data}
+
+    sleep  20
+
+    log to console  Configure L2 Loopback
+## L1 Loopback on NCS_R2
+    CONFIGURE L2-LOOPBACK    ${NCS_R2_net_connect}    ${NCS_R2_P1}.${sub_interface_49}    ${L2_loopback_template}    ${R2_sub_interface_X_data}
+    # Send Traffic for FF Loopback
+    ${spirent_traffic}=    XX_Loopback_Traffic
+    log to console  ${spirent_traffic}
+    run keyword and continue on failure    should not contain  ${spirent_traffic}    fail
+    SLEEP  30
+
+    log to console  Unconfigure L2 Loopback
+    UNCONFIGURE L2-LOOPBACK    ${NCS_R2_net_connect}    ${NCS_R2_P1}.${sub_interface_49}    ${Del_L2_loopback_template}    ${R2_sub_interface_X_data}
+
+
 
     log to console  Unconfigure all parameters
 
     ## Uncofigure all the paremeters - interface, sub-interface, CFM, evpn & l2vpn
-    UNCONFIGURE SUB-INTF    ${NCS_R1_net_connect}    ${NCS_R1_P1}.${sub_interface_49}    ${Del_NCS_sub_int_template}    ${R1_sub_interface_data}
-    UNCONFIGURE SUB-INTF    ${NCS_R2_net_connect}    ${NCS_R2_P1}.${sub_interface_49}    ${Del_NCS_sub_int_template}    ${R2_sub_interface_data}
-    UNCONFIGURE INTF    ${NCS_R1_net_connect}    ${NCS_R1_P1}    ${Del_NCS_int_template}    ${R1_interface_data}
-    UNCONFIGURE INTF    ${NCS_R2_net_connect}    ${NCS_R2_P1}    ${Del_NCS_int_template}    ${R2_interface_data}
-    UNCONFIGURE SERVICE-POLICY-MAP  ${NCS_R1_net_connect}    ${Del_Ser_Pol_map_template}    ${Ser_Pol_map_1G_data}
-    UNCONFIGURE SERVICE-POLICY-MAP  ${NCS_R2_net_connect}    ${Del_Ser_Pol_map_template}    ${Ser_Pol_map_1G_data}
-    UNCONFIGURE SERVICE-POLICY-MAP  ${NCS_R1_net_connect}    ${Del_Ser_Pol_map_template}    ${Ser_Pol_map_500M_data}
-    UNCONFIGURE SERVICE-POLICY-MAP  ${NCS_R2_net_connect}    ${Del_Ser_Pol_map_template}    ${Ser_Pol_map_500M_data}
-    UNCONFIGURE CFM    ${NCS_R1_net_connect}    ${Del_CFM_template}    ${R1_cfm_data}
-    UNCONFIGURE CFM    ${NCS_R2_net_connect}    ${Del_CFM_template}    ${R2_cfm_data}
-    UNCONFIGURE EVPN    ${NCS_R1_net_connect}    ${Del_EVPN_template}    ${R1_evpn_data}
-    UNCONFIGURE EVPN    ${NCS_R2_net_connect}    ${Del_EVPN_template}    ${R2_evpn_data}
-    UNCONFIGURE L2VPN    ${NCS_R1_net_connect}    ${Del_L2VPN_template}    ${R1_l2vpn_data}
-    UNCONFIGURE L2VPN    ${NCS_R2_net_connect}    ${Del_L2VPN_template}    ${R2_l2vpn_data}
+#    UNCONFIGURE SUB-INTF    ${NCS_R1_net_connect}    ${NCS_R1_P1}.${sub_interface_49}    ${Del_NCS_sub_int_template}    ${R1_sub_interface_data}
+#    UNCONFIGURE SUB-INTF    ${NCS_R2_net_connect}    ${NCS_R2_P1}.${sub_interface_49}    ${Del_NCS_sub_int_template}    ${R2_sub_interface_data}
+#    UNCONFIGURE INTF    ${NCS_R1_net_connect}    ${NCS_R1_P1}    ${Del_NCS_int_template}    ${R1_interface_data}
+#    UNCONFIGURE INTF    ${NCS_R2_net_connect}    ${NCS_R2_P1}    ${Del_NCS_int_template}    ${R2_interface_data}
+#    UNCONFIGURE SERVICE-POLICY-MAP  ${NCS_R1_net_connect}    ${Del_Ser_Pol_map_template}    ${Ser_Pol_map_1G_data}
+#    UNCONFIGURE SERVICE-POLICY-MAP  ${NCS_R2_net_connect}    ${Del_Ser_Pol_map_template}    ${Ser_Pol_map_1G_data}
+#    UNCONFIGURE SERVICE-POLICY-MAP  ${NCS_R1_net_connect}    ${Del_Ser_Pol_map_template}    ${Ser_Pol_map_500M_data}
+#    UNCONFIGURE SERVICE-POLICY-MAP  ${NCS_R2_net_connect}    ${Del_Ser_Pol_map_template}    ${Ser_Pol_map_500M_data}
+#    UNCONFIGURE CFM    ${NCS_R1_net_connect}    ${Del_CFM_template}    ${R1_cfm_data}
+#    UNCONFIGURE CFM    ${NCS_R2_net_connect}    ${Del_CFM_template}    ${R2_cfm_data}
+#    UNCONFIGURE EVPN    ${NCS_R1_net_connect}    ${Del_EVPN_template}    ${R1_evpn_data}
+#    UNCONFIGURE EVPN    ${NCS_R2_net_connect}    ${Del_EVPN_template}    ${R2_evpn_data}
+#    UNCONFIGURE L2VPN    ${NCS_R1_net_connect}    ${Del_L2VPN_template}    ${R1_l2vpn_data}
+#    UNCONFIGURE L2VPN    ${NCS_R2_net_connect}    ${Del_L2VPN_template}    ${R2_l2vpn_data}
     log to console    END OF TEST CASE
 
 ## F to F : 49 to 49
@@ -1966,7 +1995,7 @@ EVPL_PTP_NCS-NCS_FtoF
     # Send Traffic for FF Loopback
     ${spirent_traffic}=    FF_Loopback_Traffic
     log to console  ${spirent_traffic}
-    run keyword and continue on failure    should contain  ${spirent_traffic}    fail
+    run keyword and continue on failure    should not contain  ${spirent_traffic}    fail
     SLEEP  30
 
     log to console  Unconfigure L1 Loopback
@@ -1980,7 +2009,7 @@ EVPL_PTP_NCS-NCS_FtoF
     # Send Traffic for FF Loopback
     ${spirent_traffic}=    FF_Loopback_Traffic
     log to console  ${spirent_traffic}
-    run keyword and continue on failure    should contain  ${spirent_traffic}    fail
+    run keyword and continue on failure    should not contain  ${spirent_traffic}    fail
     SLEEP  30
 
     log to console  Unconfigure L2 Loopback
