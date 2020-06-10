@@ -1970,7 +1970,7 @@ EVPL_PTP_NCS-NCS_FtoF
 #    SLEEP  30
 
     log to console  Unconfigure L1 Loopback
-    UNCONFIGURE L1-LOOPBACK    ${NCS_R2_net_connect}    ${NCS_R2_P1}    ${L1_loopback_template}    ${R2_sub_interface_F_data}
+    UNCONFIGURE L1-LOOPBACK    ${NCS_R2_net_connect}    ${NCS_R2_P1}    ${Del_L1_loopback_template}    ${R2_sub_interface_F_data}
 
     sleep  20
 
@@ -1984,7 +1984,7 @@ EVPL_PTP_NCS-NCS_FtoF
 #    SLEEP  30
 
     log to console  Unconfigure L2 Loopback
-    UNCONFIGURE L2-LOOPBACK    ${NCS_R2_net_connect}    ${NCS_R2_P1}.${sub_interface_49}    ${L2_loopback_template}    ${R2_sub_interface_F_data}
+    UNCONFIGURE L2-LOOPBACK    ${NCS_R2_net_connect}    ${NCS_R2_P1}.${sub_interface_49}    ${Del_L2_loopback_template}    ${R2_sub_interface_F_data}
 
 
 
