@@ -124,6 +124,19 @@ CONFIGURE LLF
     ${commit_result}    Configure Commands    ${connect_id}    template_name=${template_name}    template_data=${template_data}
     should not contain    ${commit_result}    fail
 
+CONFIGURE L1-LOOPBACK
+    [Arguments]    ${connect_id}    ${intf_name}    ${template_name}    ${template_data}
+    set to dictionary    ${template_data}    interface=${intf_name}
+    ${commit_result}    Configure Commands    ${connect_id}    template_name=${template_name}    template_data=${template_data}
+    should not contain    ${commit_result}    fail
+
+CONFIGURE L2-LOOPBACK
+    [Arguments]    ${connect_id}    ${sub_intf_name}    ${template_name}    ${template_data}
+    set to dictionary    ${template_data}    sub_interface=${sub_intf_name}
+    ${commit_result}    Configure Commands    ${connect_id}    template_name=${template_name}    template_data=${template_data}
+    should not contain    ${commit_result}    fail
+
+
 SHOW COMMAND
     [Arguments]    ${connect_id}    ${template_name}    ${template_data}
     ${show_cmd_result}    Show Commands    ${connect_id}    template_name=${${template_name}}    template_data=${template_data}    textfsm_template=${template_name}
@@ -162,6 +175,17 @@ UNCONFIGURE SERVICE-POLICY-MAP
     ${commit_result}    Configure Commands    ${connect_id}    template_name=${template_name}    template_data=${template_data}
     should not contain    ${commit_result}    fail
 
+UNCONFIGURE L1-LOOPBACK
+    [Arguments]    ${connect_id}    ${intf_name}    ${template_name}    ${template_data}
+    set to dictionary    ${template_data}    interface=${intf_name}
+    ${commit_result}    Configure Commands    ${connect_id}    template_name=${template_name}    template_data=${template_data}
+    should not contain    ${commit_result}    fail
+
+UNCONFIGURE L2-LOOPBACK
+    [Arguments]    ${connect_id}    ${sub_intf_name}    ${template_name}    ${template_data}
+    set to dictionary    ${template_data}    sub_interface=${sub_intf_name}
+    ${commit_result}    Configure Commands    ${connect_id}    template_name=${template_name}    template_data=${template_data}
+    should not contain    ${commit_result}    fail
 
 ## Accedian Config ## LTS ##
 

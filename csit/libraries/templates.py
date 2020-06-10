@@ -194,6 +194,35 @@ l2transport
 propagate remote-status
 """
 
+
+L1_loopback_template = """
+int {{ component.interface }}
+loopback internal
+"""
+
+Del_L1_loopback_template = """
+int {{ component.interface }}
+no loopback internal
+"""
+
+L2_loopback_template ="""
+int {{ component.sub_interface }} l2transport
+ethernet loopback permit internal
+commit
+exit
+exit
+ethernet loopback start local interface {{ component.sub_interface }} internal destination mac-address 0010.9400.0113 timeout 1800
+"""
+
+Del_L2_loopback_template = """
+exit
+ethernet loopback stop local interface {{ component.sub_interface }} id 1
+configure terminal
+interface {{ component.sub_interface }} l2transport
+no ethernet loopback
+
+"""
+
 show_interface_template = """show interface {{ component.interface }} brief"""
 # intf_status = """up        up"""
 

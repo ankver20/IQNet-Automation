@@ -1522,6 +1522,7 @@ EPL_PTP_NCS-NCS_MainIntf_L2CP_Transperency
 
 ### 5 June addition of XtoX, FtoF, FtoY
 
+## X to X : 49 to 50
 EVPL_PTP_NCS-NCS_XtoX
     [Tags]    EVPL_PTP_NCS-NCS_XtoX
 
@@ -1749,6 +1750,7 @@ EVPL_PTP_NCS-NCS_XtoX
     UNCONFIGURE L2VPN    ${NCS_R2_net_connect}    ${Del_L2VPN_template}    ${R2_l2vpn_data}
     log to console    END OF TEST CASE
 
+## F to F : 49 to 49
 EVPL_PTP_NCS-NCS_FtoF
     [Tags]    EVPL_PTP_NCS-NCS_FtoF
 
@@ -1957,6 +1959,35 @@ EVPL_PTP_NCS-NCS_FtoF
     ${show_result}=    SHOW COMMAND    ${NCS_R2_net_connect}    show_pol_map_int    ${template_data}
     log to console    ${show_result}
 
+
+    log to console  Configure L1 Loopback
+## L1 Loopback on NCS_R2
+    CONFIGURE L1-LOOPBACK    ${NCS_R2_net_connect}    ${NCS_R2_P1}    ${L1_loopback_template}    ${R2_sub_interface_F_data}
+#    # Send Traffic for FF Loopback
+#    ${spirent_traffic}=    FF_Loopback_Traffic
+#    log to console  ${spirent_traffic}
+#    run keyword and continue on failure    should contain  ${spirent_traffic}    fail
+#    SLEEP  30
+
+    log to console  Unconfigure L1 Loopback
+    UNCONFIGURE L1-LOOPBACK    ${NCS_R2_net_connect}    ${NCS_R2_P1}    ${L1_loopback_template}    ${R2_sub_interface_F_data}
+
+    sleep  20
+
+    log to console  Configure L2 Loopback
+## L1 Loopback on NCS_R2
+    CONFIGURE L2-LOOPBACK    ${NCS_R2_net_connect}    ${NCS_R2_P1}.${sub_interface_49}    ${L2_loopback_template}    ${R2_sub_interface_F_data}
+#    # Send Traffic for FF Loopback
+#    ${spirent_traffic}=    FF_Loopback_Traffic
+#    log to console  ${spirent_traffic}
+#    run keyword and continue on failure    should contain  ${spirent_traffic}    fail
+#    SLEEP  30
+
+    log to console  Unconfigure L2 Loopback
+    UNCONFIGURE L2-LOOPBACK    ${NCS_R2_net_connect}    ${NCS_R2_P1}.${sub_interface_49}    ${L2_loopback_template}    ${R2_sub_interface_F_data}
+
+
+
     log to console  Unconfigure all parameters
 
     ## Uncofigure all the paremeters - interface, sub-interface, CFM, evpn & l2vpn
@@ -1976,6 +2007,7 @@ EVPL_PTP_NCS-NCS_FtoF
     UNCONFIGURE L2VPN    ${NCS_R2_net_connect}    ${Del_L2VPN_template}    ${R2_l2vpn_data}
     log to console    END OF TEST CASE
 
+## F to Y : 49 to 50, 49
 EVPL_PTP_NCS-NCS_FtoY
     [Tags]    EVPL_PTP_NCS-NCS_FtoY
 
