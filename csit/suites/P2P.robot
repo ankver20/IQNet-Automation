@@ -16,6 +16,7 @@ Library           String
 Library           OperatingSystem
 Library           ${CURDIR}/../libraries/Commands.py
 Library           ${CURDIR}/../libraries/BasicTraffic.py
+Library           ${CURDIR}/../libraries/Loopback.py
 Resource          ../libraries/Resource.robot
 Resource          ../libraries/Resource.robot
 
