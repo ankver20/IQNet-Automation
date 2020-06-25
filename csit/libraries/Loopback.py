@@ -195,7 +195,7 @@ class Loopback_test:
                 print("**** No of Tx packets on deviceA are: " + str(deviceA_tx))
                 print("**** No of Rx packets on deviceA are: " + str(deviceA_rx))
                 print("**** No of Tx packets on deviceB are: " + str(deviceB_tx))
-                test_result = 'Failed'
+                test_result = 'Fail'  # It was mentioned as 'Failed'
             else:
                 print("something wrong")
 
@@ -214,7 +214,7 @@ class Loopback_test:
                 action='clear_stats')
 
         if self.serv_type == "PP":
-            pass
+            self.sub_interface = '4095'
         elif self.serv_type == "PPLLF":
             self.sub_interface = None
         else:
