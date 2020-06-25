@@ -197,22 +197,45 @@ propagate remote-status
 
 L1_loopback_template = """
 int {{ component.interface }}
+{% if component.LoopbackType == 'internal'-%}
 loopback internal
+{% elif component.LoopbackType == 'line' -%}
+loopback line
+{% else -%}
+loopback external
+{% endif %}
 """
 
 Del_L1_loopback_template = """
 int {{ component.interface }}
+{% if component.LoopbackType == 'internal'-%}
 no loopback internal
+{% elif component.LoopbackType == 'line' -%}
+no loopback line
+{% else -%}
+no loopback external
+{% endif %}
 """
+
+
 
 L2_loopback_template ="""
 int {{ component.sub_interface }} l2transport
+{% if component.LoopbackType == 'internal'-%}
 ethernet loopback permit internal
+{% else -%}
+ethernet loopback permit external
+{% endif -%}
 commit
 exit
 exit
+{% if component.LoopbackType == 'internal'-%}
 ethernet loopback start local interface {{ component.sub_interface }} internal destination mac-address 0010.9400.0113 timeout 1800
+{% else -%}
+ethernet loopback start local interface {{ component.sub_interface }} external destination mac-address 0010.9400.0113 timeout 1800
+{% endif -%}
 """
+
 
 Del_L2_loopback_template = """
 exit

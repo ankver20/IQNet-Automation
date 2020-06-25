@@ -1732,32 +1732,42 @@ EVPL_PTP_NCS-NCS_XtoX
 #    log to console    ${show_result}
 #
 
-    log to console  Configure L1 Loopback
+    log to console  Loopback Testing
+
+    ${Loopback_Tester}    Create_Loopback_test_XX
+    ${Loopback_Test_Output}=    Call method    ${Loopback_Tester}    Execute_Loopback_Test
+    log to console    ${Loopback_Test_Output}
+    run keyword and continue on failure    should not contain    ${Loopback_Test_Output}    Failed
+
+
+#### This we will use Python Code (from Dipankar) and later add this in Robot ####
+#    log to console  Configure L1 Loopback
 ## L1 Loopback on NCS_R2
-    CONFIGURE L1-LOOPBACK    ${NCS_R2_net_connect}    ${NCS_R2_P1}    ${L1_loopback_template}    ${R2_sub_interface_X_data}
-    # Send Traffic for FF Loopback
-    ${spirent_traffic}=    XX_Loopback_Traffic
-    log to console  ${spirent_traffic}
-    run keyword and continue on failure    should not contain  ${spirent_traffic}    fail
-    SLEEP  30
-
-    log to console  Unconfigure L1 Loopback
-    UNCONFIGURE L1-LOOPBACK    ${NCS_R2_net_connect}    ${NCS_R2_P1}    ${Del_L1_loopback_template}    ${R2_sub_interface_X_data}
-
-    sleep  20
-
-    log to console  Configure L2 Loopback
-## L1 Loopback on NCS_R2
-    CONFIGURE L2-LOOPBACK    ${NCS_R2_net_connect}    ${NCS_R2_P1}.${sub_interface_49}    ${L2_loopback_template}    ${R2_sub_interface_X_data}
-    # Send Traffic for FF Loopback
-    ${spirent_traffic}=    XX_Loopback_Traffic
-    log to console  ${spirent_traffic}
-    run keyword and continue on failure    should not contain  ${spirent_traffic}    fail
-    SLEEP  30
-
-    log to console  Unconfigure L2 Loopback
-    UNCONFIGURE L2-LOOPBACK    ${NCS_R2_net_connect}    ${NCS_R2_P1}.${sub_interface_49}    ${Del_L2_loopback_template}    ${R2_sub_interface_X_data}
-
+#    CONFIGURE L1-LOOPBACK    ${NCS_R2_net_connect}    ${NCS_R2_P1}    ${L1_loopback_template}    ${L1_Loopback_Internal_data}
+#    # Send Traffic for FF Loopback
+#    ${spirent_traffic}=    XX_Loopback_Traffic
+#    log to console  ${spirent_traffic}
+#    run keyword and continue on failure    should not contain  ${spirent_traffic}    fail
+#    SLEEP  30
+#
+#    log to console  Unconfigure L1 Loopback
+#    UNCONFIGURE L1-LOOPBACK    ${NCS_R2_net_connect}    ${NCS_R2_P1}    ${Del_L1_loopback_template}    ${L1_Loopback_Internal_data}
+#
+#    sleep  20
+#
+#    log to console  Configure L2 Loopback
+### L1 Loopback on NCS_R2
+#    CONFIGURE L2-LOOPBACK    ${NCS_R2_net_connect}    ${NCS_R2_P1}.${sub_interface_49}    ${L2_loopback_template}    ${R2_sub_interface_X_data}
+#    # Send Traffic for FF Loopback
+#    ${spirent_traffic}=    XX_Loopback_Traffic
+#    log to console  ${spirent_traffic}
+#    run keyword and continue on failure    should not contain  ${spirent_traffic}    fail
+#    SLEEP  30
+#
+#   log to console  Unconfigure L2 Loopback
+#   UNCONFIGURE L2-LOOPBACK    ${NCS_R2_net_connect}    ${NCS_R2_P1}.${sub_interface_49}    ${Del_L2_loopback_template}    ${R2_sub_interface_X_data}
+#
+#### This we will use Python Code (from Dipankar) and later add this in Robot ####
 
 
     log to console  Unconfigure all parameters
@@ -1989,32 +1999,43 @@ EVPL_PTP_NCS-NCS_FtoF
 #    log to console    ${show_result}
 #
 
-    log to console  Configure L1 Loopback
-## L1 Loopback on NCS_R2
-    CONFIGURE L1-LOOPBACK    ${NCS_R2_net_connect}    ${NCS_R2_P1}    ${L1_loopback_template}    ${R2_sub_interface_F_data}
-    # Send Traffic for FF Loopback
-    ${spirent_traffic}=    FF_Loopback_Traffic
-    log to console  ${spirent_traffic}
-    run keyword and continue on failure    should not contain  ${spirent_traffic}    fail
-    SLEEP  30
 
-    log to console  Unconfigure L1 Loopback
-    UNCONFIGURE L1-LOOPBACK    ${NCS_R2_net_connect}    ${NCS_R2_P1}    ${Del_L1_loopback_template}    ${R2_sub_interface_F_data}
+    log to console  Loopback Testing
 
-    sleep  20
+    ${Loopback_Tester}    Create_Loopback_test_FF
+    ${Loopback_Test_Output}=    Call method    ${Loopback_Tester}    Execute_Loopback_Test
+    log to console    ${Loopback_Test_Output}
+    run keyword and continue on failure    should not contain    ${Loopback_Test_Output}    Failed
 
-    log to console  Configure L2 Loopback
-## L1 Loopback on NCS_R2
-    CONFIGURE L2-LOOPBACK    ${NCS_R2_net_connect}    ${NCS_R2_P1}.${sub_interface_49}    ${L2_loopback_template}    ${R2_sub_interface_F_data}
-    # Send Traffic for FF Loopback
-    ${spirent_traffic}=    FF_Loopback_Traffic
-    log to console  ${spirent_traffic}
-    run keyword and continue on failure    should not contain  ${spirent_traffic}    fail
-    SLEEP  30
 
-    log to console  Unconfigure L2 Loopback
-    UNCONFIGURE L2-LOOPBACK    ${NCS_R2_net_connect}    ${NCS_R2_P1}.${sub_interface_49}    ${Del_L2_loopback_template}    ${R2_sub_interface_F_data}
-
+#### This we will use Python Code (from Dipankar) and later add this in Robot ####
+#    log to console  Configure L1 Loopback
+### L1 Loopback on NCS_R2
+#    CONFIGURE L1-LOOPBACK    ${NCS_R2_net_connect}    ${NCS_R2_P1}    ${L1_loopback_template}    ${L1_Loopback_Internal_data}
+#    # Send Traffic for FF Loopback
+#    ${spirent_traffic}=    FF_Loopback_Traffic
+#    log to console  ${spirent_traffic}
+#    run keyword and continue on failure    should not contain  ${spirent_traffic}    fail
+#    SLEEP  30
+#
+#    log to console  Unconfigure L1 Loopback
+#    UNCONFIGURE L1-LOOPBACK    ${NCS_R2_net_connect}    ${NCS_R2_P1}    ${Del_L1_loopback_template}    ${L2_Loopback_Internal_data}
+#
+#    sleep  20
+#
+#    log to console  Configure L2 Loopback
+### L1 Loopback on NCS_R2
+#    CONFIGURE L2-LOOPBACK    ${NCS_R2_net_connect}    ${NCS_R2_P1}.${sub_interface_49}    ${L2_loopback_template}    ${L2_Loopback_Internal_data}
+#    # Send Traffic for FF Loopback
+#    ${spirent_traffic}=    FF_Loopback_Traffic
+#    log to console  ${spirent_traffic}
+#    run keyword and continue on failure    should not contain  ${spirent_traffic}    fail
+#    SLEEP  30
+#
+#    log to console  Unconfigure L2 Loopback
+#    UNCONFIGURE L2-LOOPBACK    ${NCS_R2_net_connect}    ${NCS_R2_P1}.${sub_interface_49}    ${Del_L2_loopback_template}    ${L2_Loopback_Internal_data}
+#
+#### This we will use Python Code (from Dipankar) and later add this in Robot ####
 
 
     log to console  Unconfigure all parameters
@@ -2036,7 +2057,7 @@ EVPL_PTP_NCS-NCS_FtoF
 #    UNCONFIGURE L2VPN    ${NCS_R2_net_connect}    ${Del_L2VPN_template}    ${R2_l2vpn_data}
     log to console    END OF TEST CASE
 
-## F to Y : 49 to 50, 49
+## Y to F : 50, 49 to 49
 EVPL_PTP_NCS-NCS_FtoY
     [Tags]    EVPL_PTP_NCS-NCS_FtoY
 
@@ -2052,8 +2073,8 @@ EVPL_PTP_NCS-NCS_FtoY
     CONFIGURE INTERFACE    ${NCS_R1_net_connect}    ${NCS_R1_P1}    ${NCS_int_template}    ${R1_interface_data}
     CONFIGURE INTERFACE    ${NCS_R2_net_connect}    ${NCS_R2_P1}    ${NCS_int_template}    ${R2_interface_data}
     #configure sub-interface on NCS_R1 & NCS_R2
-    CONFIGURE SUB-INTERFACE    ${NCS_R1_net_connect}    ${NCS_R1_P1}.${sub_interface_49}    ${NCS_sub_int_template}    ${R1_sub_interface_F_data}
-    CONFIGURE SUB-INTERFACE    ${NCS_R2_net_connect}    ${NCS_R2_P1}.${sub_interface_49}    ${NCS_sub_int_template}    ${R2_sub_interface_Y_data}
+    CONFIGURE SUB-INTERFACE    ${NCS_R1_net_connect}    ${NCS_R1_P1}.${sub_interface_49}    ${NCS_sub_int_template}    ${R1_sub_interface_Y_data}
+    CONFIGURE SUB-INTERFACE    ${NCS_R2_net_connect}    ${NCS_R2_P1}.${sub_interface_49}    ${NCS_sub_int_template}    ${R2_sub_interface_F_data}
     #configure service Policy map on sub-intf in ingress
     CONFIGURE SERVICE-POLICY-MAP-INTF    ${NCS_R1_net_connect}    ${NCS_R1_P1}.${sub_interface_49}    ${Ser_Pol_map_intf_template}    ${Ser_Pol_map_1G_data}
     CONFIGURE SERVICE-POLICY-MAP-INTF    ${NCS_R2_net_connect}    ${NCS_R2_P1}.${sub_interface_49}    ${Ser_Pol_map_intf_template}    ${Ser_Pol_map_1G_data}
@@ -2159,7 +2180,7 @@ EVPL_PTP_NCS-NCS_FtoY
     log to console    ${show_result}
     run keyword and continue on failure    should contain    ${show_result}    ${SLM_status}
 
-#    log to console  Send 100 Mbps Traffic
+#    log to console  Send 100 Mbps Traffic --> will be replaced by Class based Traffic
 #
 #    # Send Traffic from Spirent 100 Mbps
 #    ${spirent_traffic}=    L2_100M_F1500_Traffic
@@ -2177,7 +2198,7 @@ EVPL_PTP_NCS-NCS_FtoY
     ${show_result}=    SHOW COMMAND    ${NCS_R2_net_connect}    show_pol_map_int    ${template_data}
     log to console    ${show_result}
 
-#    log to console  Send 1 Gbps Traffic
+#    log to console  Send 1 Gbps Traffic --> will be replaced by Class based Traffic
 #
 #    # Send Traffic from Spirent 1 Gbps
 #    ${spirent_traffic}=    L2_1G_F1500Traffic
@@ -2244,6 +2265,15 @@ EVPL_PTP_NCS-NCS_FtoY
     ${template_data}=    Create Dictionary    interface=${NCS_R2_P1}.${sub_interface_49}
     ${show_result}=    SHOW COMMAND    ${NCS_R2_net_connect}    show_pol_map_int    ${template_data}
     log to console    ${show_result}
+
+
+    log to console  Loopback Testing
+
+    ${Loopback_Tester}    Create_Loopback_test_FY
+    ${Loopback_Test_Output}=    Call method    ${Loopback_Tester}    Execute_Loopback_Test
+    log to console    ${Loopback_Test_Output}
+    run keyword and continue on failure    should not contain    ${Loopback_Test_Output}    Failed
+
 
     log to console  Unconfigure all parameters
 

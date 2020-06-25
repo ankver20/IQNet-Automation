@@ -71,13 +71,6 @@ R2_sub_interface_F_data = {
 }
 
 
-R2_sub_interface_Y_data = {
-    'description': 'Ankit - Automation Test Service Y',
-    'service_type': 'Y',            # P/F/X/Y/D
-    'encapsulation1': 'dot1ad 50',  #dot1q or dot1ad <vlan> // populate only for F/X/Y/D
-    'encapsulation2': 'dot1q 49'   #dot1q or dot1ad <vlan> // populate only for Y/D
-}
-
 
 Pol_map_egr_data = {
     'output_policy' : 'egr'
@@ -156,6 +149,28 @@ R2_cfm_data = {
     'UMC': 'XXX-500134',
 	'local_mep_id': '2',
     'remote_mep_id': '1'
+}
+
+## Loopback L1
+L1_Loopback_Internal_data = {
+    'LoopbackType': 'internal'
+}
+
+L1_Loopback_External_data = {
+    'LoopbackType': 'external'
+}
+
+L1_Loopback_Line_data = {
+    'LoopbackType': 'line'
+}
+
+## Loopback L2
+L2_Loopback_Internal_data = {
+    'LoopbackType': 'internal'
+}
+
+L2_Loopback_External_data = {
+    'LoopbackType': 'external'
 }
 
 # LLF config contain no variables. will be applied under intf/sub-intf
