@@ -230,12 +230,12 @@ EPL_PTP_NCS-NCS_SubIntf
     ${show_result}=    SHOW COMMAND    ${NCS_R2_net_connect}    show_pol_map_int    ${template_data}
     log to console    ${show_result}
 
-    log to console  Loopback Testing
-
-    ${Loopback_Tester}    Create_Loopback_test_PP
-    ${Loopback_Test_Output}=    Call method    ${Loopback_Tester}    Execute_Loopback_Test
-    log to console    ${Loopback_Test_Output}
-    run keyword and continue on failure    should not contain    ${Loopback_Test_Output}    Failed
+#    log to console  Loopback Testing
+#
+#    ${Loopback_Tester}    Create_Loopback_test_PP
+#    ${Loopback_Test_Output}=    Call method    ${Loopback_Tester}    Execute_Loopback_Test
+#    log to console    ${Loopback_Test_Output}
+#    run keyword and continue on failure    should not contain    ${Loopback_Test_Output}    Failed
 
     log to console  Unconfigure all parameters
 
