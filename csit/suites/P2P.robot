@@ -1721,13 +1721,13 @@ EVPL_PTP_NCS-NCS_XtoX
     ${show_result}=    SHOW COMMAND    ${NCS_R2_net_connect}    show_pol_map_int    ${template_data}
     log to console    ${show_result}
 
-    log to console  send 1 Gbps (Drop expected)
-
-    # Send Traffic from Spirent 1 Gbps // Traffic will drop so no check added here
-    ${spirent_traffic}=    L2_1G_F1500Traffic
-    log to console  ${spirent_traffic}
-    run keyword and continue on failure    should contain  ${spirent_traffic}    fail
-    SLEEP  30
+##    log to console  send 1 Gbps (Drop expected)
+##
+##    # Send Traffic from Spirent 1 Gbps // Traffic will drop so no check added here
+##    ${spirent_traffic}=    L2_1G_F1500Traffic
+##    log to console  ${spirent_traffic}
+##    run keyword and continue on failure    should contain  ${spirent_traffic}    fail
+##    SLEEP  30
 
     # show command for policy map counter
     # show policy map on NCS_R1
