@@ -2277,7 +2277,7 @@ EVPL_PTP_NCS-NCS_FtoY
 
     log to console  Loopback Testing
 
-    ${Loopback_Tester}    Create_Loopback_test_FY
+    ${Loopback_Tester}    Create_Loopback_test_YF
     ${Loopback_Test_Output}=    Call method    ${Loopback_Tester}    Execute_Loopback_Test
     log to console    ${Loopback_Test_Output}
     run keyword and continue on failure    should not contain    ${Loopback_Test_Output}    Failed
