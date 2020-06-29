@@ -177,13 +177,14 @@ class Loopback_test:
                 print(traffic_results_ret)
             else:
                 print("***** run sth.traffic_stats successfully, and results is:")
-                # pprint(traffic_results_ret)
+                pprint(traffic_results_ret)
                 # pprint(traffic_results_ret1)
 
             deviceA_tx = traffic_results_ret[port_handle[0]]['aggregate']['tx']['pkt_count']
             deviceA_rx = traffic_results_ret[port_handle[0]]['aggregate']['rx']['pkt_count']
             deviceB_tx = traffic_results_ret[port_handle[1]]['aggregate']['tx']['pkt_count']
             deviceB_rx = traffic_results_ret[port_handle[1]]['aggregate']['rx']['pkt_count']
+
             if deviceA_rx == deviceA_tx:
                 print("***************** " + str(item1) + " " + str(inter_exter) + "Test has Passed")
                 print("**** No of Rx packets on deviceA are: " + str(deviceA_rx))
@@ -198,6 +199,8 @@ class Loopback_test:
                 test_result = 'Fail'  # It was mentioned as 'Failed'
             else:
                 print("something wrong")
+                test_result = 'something wrong'
+
 
             dict_name = '{}_{}_result'.format(item1, inter_exter)
             dict_local = {}
