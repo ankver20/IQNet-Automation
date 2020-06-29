@@ -58,7 +58,7 @@ class Loopback_test:
         self.deviceB_X_VLAN = 50
         self.deviceA_Y_VLAN = [50, 49]
         self.deviceB_F_VLAN = 49
-        self.traffic_rate = 800
+        self.traffic_rate = 400
         self.port_speed = 'ether1000'  # ether1000,ether10000
         self.copper_fiber = 'fiber'  # copper,fiber
         self.mac = {
