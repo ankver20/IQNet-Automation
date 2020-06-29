@@ -217,7 +217,7 @@ class Loopback_test:
                 action='clear_stats')
 
         if self.serv_type == "PP":
-            self.sub_interface = '4095'
+            pass
         elif self.serv_type == "PPLLF":
             self.sub_interface = None
         else:
