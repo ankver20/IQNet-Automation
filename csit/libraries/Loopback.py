@@ -185,6 +185,7 @@ class Loopback_test:
             deviceB_tx = traffic_results_ret[port_handle[1]]['aggregate']['tx']['pkt_count']
             deviceB_rx = traffic_results_ret[port_handle[1]]['aggregate']['rx']['pkt_count']
 
+
             if deviceA_rx == deviceA_tx:
                 print("***************** " + str(item1) + " " + str(inter_exter) + "Test has Passed")
                 print("**** No of Rx packets on deviceA are: " + str(deviceA_rx))

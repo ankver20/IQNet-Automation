@@ -1911,14 +1911,14 @@ EVPL_PTP_NCS-NCS_FtoF
     run keyword and continue on failure    should contain    ${show_result}    ${local_mep_info}
     run keyword and continue on failure    should contain    ${show_result}    ${peer_mep_info}
 
-#    log to console  Verify SLM/DMM
-#
-#    # verify the SLM/DMM status on NCS_R1
-#    sleep  400
-#    ${template_data}=    Create Dictionary    interface=${NCS_R1_P1}.${sub_interface_49}
-#    ${show_result}=    SHOW COMMAND    ${NCS_R1_net_connect}    show_SLA_template    ${template_data}
-#    log to console    ${show_result}
-#    run keyword and continue on failure    should contain    ${show_result}    ${SLM_status}
+    log to console  Verify SLM/DMM
+
+    # verify the SLM/DMM status on NCS_R1
+    sleep  400
+    ${template_data}=    Create Dictionary    interface=${NCS_R1_P1}.${sub_interface_49}
+    ${show_result}=    SHOW COMMAND    ${NCS_R1_net_connect}    show_SLA_template    ${template_data}
+    log to console    ${show_result}
+    run keyword and continue on failure    should contain    ${show_result}    ${SLM_status}
 
 ##    log to console  Send 100 Mbps Traffic
 ##
@@ -2046,23 +2046,23 @@ EVPL_PTP_NCS-NCS_FtoF
 #### This we will use Python Code (from Dipankar) and later add this in Robot ####
 
 
-#    log to console  Unconfigure all parameters
-#
-#    ## Uncofigure all the paremeters - interface, sub-interface, CFM, evpn & l2vpn
-#    UNCONFIGURE SUB-INTF    ${NCS_R1_net_connect}    ${NCS_R1_P1}.${sub_interface_49}    ${Del_NCS_sub_int_template}    ${R1_sub_interface_data}
-#    UNCONFIGURE SUB-INTF    ${NCS_R2_net_connect}    ${NCS_R2_P1}.${sub_interface_49}    ${Del_NCS_sub_int_template}    ${R2_sub_interface_data}
-#    UNCONFIGURE INTF    ${NCS_R1_net_connect}    ${NCS_R1_P1}    ${Del_NCS_int_template}    ${R1_interface_data}
-#    UNCONFIGURE INTF    ${NCS_R2_net_connect}    ${NCS_R2_P1}    ${Del_NCS_int_template}    ${R2_interface_data}
-#    UNCONFIGURE SERVICE-POLICY-MAP  ${NCS_R1_net_connect}    ${Del_Ser_Pol_map_template}    ${Ser_Pol_map_1G_data}
-#    UNCONFIGURE SERVICE-POLICY-MAP  ${NCS_R2_net_connect}    ${Del_Ser_Pol_map_template}    ${Ser_Pol_map_1G_data}
-#    UNCONFIGURE SERVICE-POLICY-MAP  ${NCS_R1_net_connect}    ${Del_Ser_Pol_map_template}    ${Ser_Pol_map_500M_data}
-#    UNCONFIGURE SERVICE-POLICY-MAP  ${NCS_R2_net_connect}    ${Del_Ser_Pol_map_template}    ${Ser_Pol_map_500M_data}
-#    UNCONFIGURE CFM    ${NCS_R1_net_connect}    ${Del_CFM_template}    ${R1_cfm_data}
-#    UNCONFIGURE CFM    ${NCS_R2_net_connect}    ${Del_CFM_template}    ${R2_cfm_data}
-#    UNCONFIGURE EVPN    ${NCS_R1_net_connect}    ${Del_EVPN_template}    ${R1_evpn_data}
-#    UNCONFIGURE EVPN    ${NCS_R2_net_connect}    ${Del_EVPN_template}    ${R2_evpn_data}
-#    UNCONFIGURE L2VPN    ${NCS_R1_net_connect}    ${Del_L2VPN_template}    ${R1_l2vpn_data}
-#    UNCONFIGURE L2VPN    ${NCS_R2_net_connect}    ${Del_L2VPN_template}    ${R2_l2vpn_data}
+    log to console  Unconfigure all parameters
+
+    ## Uncofigure all the paremeters - interface, sub-interface, CFM, evpn & l2vpn
+    UNCONFIGURE SUB-INTF    ${NCS_R1_net_connect}    ${NCS_R1_P1}.${sub_interface_49}    ${Del_NCS_sub_int_template}    ${R1_sub_interface_data}
+    UNCONFIGURE SUB-INTF    ${NCS_R2_net_connect}    ${NCS_R2_P1}.${sub_interface_49}    ${Del_NCS_sub_int_template}    ${R2_sub_interface_data}
+    UNCONFIGURE INTF    ${NCS_R1_net_connect}    ${NCS_R1_P1}    ${Del_NCS_int_template}    ${R1_interface_data}
+    UNCONFIGURE INTF    ${NCS_R2_net_connect}    ${NCS_R2_P1}    ${Del_NCS_int_template}    ${R2_interface_data}
+    UNCONFIGURE SERVICE-POLICY-MAP  ${NCS_R1_net_connect}    ${Del_Ser_Pol_map_template}    ${Ser_Pol_map_1G_data}
+    UNCONFIGURE SERVICE-POLICY-MAP  ${NCS_R2_net_connect}    ${Del_Ser_Pol_map_template}    ${Ser_Pol_map_1G_data}
+    UNCONFIGURE SERVICE-POLICY-MAP  ${NCS_R1_net_connect}    ${Del_Ser_Pol_map_template}    ${Ser_Pol_map_500M_data}
+    UNCONFIGURE SERVICE-POLICY-MAP  ${NCS_R2_net_connect}    ${Del_Ser_Pol_map_template}    ${Ser_Pol_map_500M_data}
+    UNCONFIGURE CFM    ${NCS_R1_net_connect}    ${Del_CFM_template}    ${R1_cfm_data}
+    UNCONFIGURE CFM    ${NCS_R2_net_connect}    ${Del_CFM_template}    ${R2_cfm_data}
+    UNCONFIGURE EVPN    ${NCS_R1_net_connect}    ${Del_EVPN_template}    ${R1_evpn_data}
+    UNCONFIGURE EVPN    ${NCS_R2_net_connect}    ${Del_EVPN_template}    ${R2_evpn_data}
+    UNCONFIGURE L2VPN    ${NCS_R1_net_connect}    ${Del_L2VPN_template}    ${R1_l2vpn_data}
+    UNCONFIGURE L2VPN    ${NCS_R2_net_connect}    ${Del_L2VPN_template}    ${R2_l2vpn_data}
     log to console    END OF TEST CASE
 
 ## Y to F : 50, 49 to 49
